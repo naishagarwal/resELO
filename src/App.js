@@ -22,9 +22,15 @@ export default function Page() {
         // You can also navigate to a different page, trigger a function, etc.
     }
 
+    function back() {
+        //TODO: Go back to the club page
+    }
+
     return (
         <>
+        <button className="back-button" onClick={back}> Back To Club Page</button>
         <h1>Choose the better resume</h1>
+        
         <div className="content-container">
             <Resume pdf_link={pdf_1_link} onButtonClick={() => winClick(pdf_1_link, pdf_2_link)}/>
             <Resume pdf_link={pdf_2_link} onButtonClick={() => winClick(pdf_2_link, pdf_1_link)}/>

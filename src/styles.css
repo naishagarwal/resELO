@@ -13,12 +13,22 @@
   width: 100%;
 }
 
+.header-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 20 auto;
+  width: 100%;
+  justify-content: space-around;
+}
+
 .content-container{
   display: flex;
   flex-direction: row;
   align-items: center;
   margin: 20 auto;
   width: 100%;
+  justify-content: space-between;
 }
 
 .pdf{
@@ -50,6 +60,24 @@
   line-height: normal;
 }
 
+.back-button{
+  margin: 0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 2px solid #FFF;
+  background: white;
+  
+
+  /* text styling*/
+  color: var(--olive_green_dark);
+  font-family: var(--font);
+}
+
+.back-button:hover{
+  background: var(--interactive-transparent-enabled, rgba(0, 0, 0, 0.00));
+  color: #FFF;
+}
+
 .resume-button:hover{
   background: white;
   color: var(--olive_green_dark)
@@ -60,7 +88,8 @@ body {
 }
 
 h1 {
-  margin-top: 0.8em;
+  margin-top: 0.3em;
+  margin-bottom: 0.6em;
   color: #FFF;
   text-align: center;
   font-family: var(--font);
