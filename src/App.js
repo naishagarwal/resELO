@@ -1,72 +1,43 @@
 import React from 'react';
+import { useState } from 'react';
 
-/*
-import { Document, Page, pdfjs } from 'react-pdf';
-
-// Configure PDF.js worker to load PDFs properly
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-class PDFViewer extends React.Component {
-  state = {
-    numPages: null,
-    pageNumber: 1,
-  };
-
-  onDocumentLoadSuccess = ({ numPages }) => {
-    this.setState({ numPages });
-  };
-
-  render() {
-    const { pageNumber, numPages } = this.state;
-
+function Resume({ pdf_link, onButtonClick }) {
     return (
-      <div>
-        <Document
-          file="sample_resume(1).pdf" // Replace with the path to your PDF file
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pageNumber} />
-        </Document>
-        <p>
-          Page {pageNumber} of {numPages}
-        </p>
-      </div>
+        <div className="resume-container">
+            <iframe src="http://africau.edu/images/default/sample.pdf" className="pdf" />
+            <button className="resume-button" onClick={onButtonClick}> This One </button>
+        </div>
     );
   }
-}
 
-export default PDFViewer;
-*/
+export default function Page() {
+    const [pdf_1_link, setPdf_1_link] = useState(get_pdf_link()); //replace with function that returns the link
+    const [pdf_2_link, setPdf_2_link] = useState(get_pdf_link()); //replace with function that returns the link
 
+    console.log('pdf_1_link: ' + pdf_1_link);
+    console.log('pdf_2_link: ' + pdf_2_link);
 
-class ImageButton extends React.Component {
-  handleClick = () => {
-    // Define the action you want to perform when the image button is clicked
-    console.log('Button clicked!'); // For example, log a message to the console
-    // You can also navigate to a different page, trigger a function, etc.
-  };
+    function winClick(win,lose) { //Do we want to pass in link or ID? - let's do link, but convert to ID when calling the backend func
+        console.log('Button clicked!'); // For example, log a message to the console
+        // You can also navigate to a different page, trigger a function, etc.
+    }
 
-  render() {
     return (
-      <>
-      <div className="board-row">
-      <object data="http://africau.edu/images/default/sample.pdf" type="application/pdf" width="500" height="700">
-          <p>Alternative text - Link to the <a href="http://africau.edu/images/default/sample.pdf">resume!</a></p>
-        </object>
-      <button onClick={this.handleClick}> This one! </button>
-      </div>
-      </>
-    );
-  }
+        <>
+        <h1>Choose the better resume</h1>
+        <div className="content-container">
+            <Resume pdf_link={pdf_1_link} onButtonClick={() => winClick(pdf_1_link, pdf_2_link)}/>
+            <Resume pdf_link={pdf_2_link} onButtonClick={() => winClick(pdf_2_link, pdf_1_link)}/>
+        </div>
+        </>
+        
+    )
 }
 
-function Page() {
-  return (
-    <div className="page">
-      <div className="content">{props.content}</div>
-    </div>
-  );
+
+
+function get_pdf_link() { //placeholder fucntion, might actually have to be one function that returns two links later
+    //call backend function that returns the link
+    console.log('get_pdf_link called!');
+    return 'http://africau.edu/images/default/sample.pdf';
 }
-
-export default ImageButton;
-
