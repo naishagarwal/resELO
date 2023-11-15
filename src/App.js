@@ -1,6 +1,7 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Compare from './Pages/Compare/compare_page';
 import Upload from './Pages/Upload/upload_page';
+import Club_Page from './Pages/Club_Page/club_page';
 
 
 const App = () => {
