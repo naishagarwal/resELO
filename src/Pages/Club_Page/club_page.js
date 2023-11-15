@@ -1,19 +1,19 @@
 import React from 'react';
-import './styles.css';
+import club_styles from './club_page_style.module.css';
 
 function Counter({resumes_graded, total_resumes}) {
   return (
-    <div className="counter">
+    <div className={club_styles.counter}>
       <h1>{resumes_graded} / {total_resumes}</h1>
     </div>
   )
 }
 
-function Resumes({resumes}){ // Do we want resumes to be a link that can present the pdf or just a name
+function Resumes({resumes}){ // Do we want resumes to be a link that can prese nt the pdf or just a name
   const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
-  <div className="resume-container" key={index}>{resume}</div>
+  <div className={club_styles.resumeContainer} key={index}>{resume}</div>
  ));
- return <div className="scroll-container">{resumeItems}</div>
+ return <div className={club_styles.scrollContainer}>{resumeItems}</div>
 }
 
 export default function Page() {
@@ -30,11 +30,11 @@ export default function Page() {
   function compare(){
     //TODO: go to resume comparison page
   }  
-
+  document.body.style.backgroundColor = "#3f4f37cc";
   return(
     <>
-      <button className="back-button" onClick={back}> Back to Clubs page </button>
-      <button className="compare" onClick={compare}> CR </button>
+      <button className={club_styles.backButton} onClick={back}> Back to Clubs page </button>
+      <button className={club_styles.compare} onClick={compare}> CR </button>
       <div>
         <Resumes resumes={resume_list}/>
         <Counter resumes_graded = {resumes_graded} resumes_total = {resumes_total} />

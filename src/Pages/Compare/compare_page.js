@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
+import compare_styles from './compare_style.module.css';
 
 function Resume({ pdf_link, onButtonClick }) {
     return (
-        <div className="resume-container">
-            <iframe src={pdf_link} className="pdf" />
-            <button className="resume-button" onClick={onButtonClick}> This One </button>
+        <div className={compare_styles.resumeContainer}>
+            <iframe src={pdf_link} className={compare_styles.pdf} />
+            <button className={compare_styles.resumeButton} onClick={onButtonClick}> This One </button>
         </div>
     );
 }
@@ -19,7 +20,7 @@ function get_pdf_link() { //placeholder fucntion, might actually have to be one 
 export default function Page() {
     const [pdf_1_link, setPdf_1_link] = useState(get_pdf_link()); //replace with function that returns the link
     const [pdf_2_link, setPdf_2_link] = useState(get_pdf_link()); //replace with function that returns the link
-
+    document.body.style.backgroundColor = '#3f4f37cc';
     //console.log('pdf_1_link: ' + pdf_1_link);
     //console.log('pdf_2_link: ' + pdf_2_link);
 
@@ -33,15 +34,13 @@ export default function Page() {
     }
 
     return (
-        <>
-        <button className="back-button" onClick={back}> Back To Club Page</button>
-        <h1>Choose the better resume</h1>
-        
-        <div className="content-container">
-            <Resume pdf_link={pdf_1_link} onButtonClick={() => winClick(pdf_1_link, pdf_2_link)}/>
-            <Resume pdf_link={pdf_2_link} onButtonClick={() => winClick(pdf_2_link, pdf_1_link)}/>
+        <div>
+            <button className={compare_styles.backButton} onClick={back}> Back To Club Page</button>
+            <h1>Choose the better resume</h1>
+            <div className={compare_styles.contentContainer}>
+                <Resume pdf_link={pdf_1_link} onButtonClick={() => winClick(pdf_1_link, pdf_2_link)}/>
+                <Resume pdf_link={pdf_2_link} onButtonClick={() => winClick(pdf_2_link, pdf_1_link)}/>
+            </div>
         </div>
-        </>
-        
     )
 }
