@@ -2,6 +2,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Compare from './Pages/Compare/compare_page';
 import Upload from './Pages/Upload/upload_page';
 import Club_Page from './Pages/Club_Page/club_page';
+import User_Dashboard from './Pages/User_Dashboard/dashboard_Page'
 
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
          <Route path="/compare" element={<Compare />} />
          <Route path="/" element={<Upload />} />
          <Route path="/club-page" element={<Club_Page />} />
+         <Route path="/dashboard" element={<User_Dashboard />} />
       </Routes>
       </BrowserRouter>
  );
