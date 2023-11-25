@@ -2,18 +2,28 @@ import React from 'react';
 import club_styles from './club_page_style.module.css';
 
 function Counter({resumes_graded, total_resumes}) {
+  const graded = Number(resumes_graded);
+  const total = Number(total_resumes);
   return (
-    <div className={club_styles.counter}>
-      <h1>{resumes_graded} / {total_resumes}</h1>
-    </div>
+    <>
+      <div className={club_styles.counter}> 
+        <div className={club_styles.titleBar}> Counter </div>
+        <div className={club_styles.counterContent}>{graded} / {total}</div>
+      </div>
+    </>
   )
 }
 
 function Resumes({resumes}){ // Do we want resumes to be a link that can prese nt the pdf or just a name
-  const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
-  <div className={club_styles.resumeContainer} key={index}>{resume}</div>
- ));
- return <div className={club_styles.scrollContainer}>{resumeItems}</div>
+ const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
+    <div className={club_styles.resumeContainer} key={index}>{resume}</div>
+    )
+  );
+
+ return (<div className={club_styles.scrollContainer}>
+  <div className={club_styles.scrollTitle}> Club Resumes </div>
+  {resumeItems}
+ </div>)
 }
 
 export default function Page() {
@@ -30,22 +40,32 @@ export default function Page() {
   function compare(){
     //TODO: go to resume comparison page
   }  
+
   document.body.style.backgroundColor = "#3f4f37cc";
+  
   return(
-    <>
+    <div>
       <button className={club_styles.backButton} onClick={back}> Back to Clubs page </button>
-      <button className={club_styles.compare} onClick={compare}> CR </button>
-      <div>
-        <Resumes resumes={resume_list}/>
-        <Counter resumes_graded = {resumes_graded} resumes_total = {resumes_total} />
+      <h1> Club Page </h1>
+      <div className={club_styles.contentContainer}>
+        <div className={club_styles.content}>
+          <Resumes resumes={resume_list} ></Resumes>
+        </div>
+        <div className={club_styles.content}>
+          <Counter resumesGraded={resumes_graded} resumeTotal={resumes_total}></Counter>
+        </div>
       </div>
-    </>
+    </div>
   )
 
 }
 
 function get_resumes() {
-  return ['zane','cheryl','artin','naisha'];
+  let resumes = [];
+  for (let i = 0; i < 100; i++){
+    resumes.push(i);
+  };
+  return resumes;
 }
 
 function get_resumes_graded() {
