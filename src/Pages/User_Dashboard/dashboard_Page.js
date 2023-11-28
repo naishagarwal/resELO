@@ -2,6 +2,8 @@ import dash_styles from './dashboard.module.css';
 import { useState } from 'react'; 
 import { AddClub } from './add_club.js'; 
 
+//TODO: One issue is the buttons disappear when I refresh the page
+
 function User_Dashboard() { 
   const [inputValue, setInputValue] = useState('');
   const [components, setComponents] = useState([]);
@@ -36,6 +38,7 @@ function User_Dashboard() {
       </div>
       <div className="output">
          {components.map((club, i) => (
+          //TODO: Make the button each have its own Club Page
             <div key={i}>
               <AddClub text={club.service}></AddClub>
             </div>
