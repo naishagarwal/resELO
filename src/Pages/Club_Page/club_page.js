@@ -53,6 +53,7 @@ export default function Page() {
         </div>
         <div className={club_styles.content}>
           <Counter resumesGraded={resumes_graded} resumeTotal={resumes_total}></Counter>
+          <div className={club_styles.compareButton} onClick={compare}> Compare </div>
         </div>
       </div>
     </div>
@@ -61,6 +62,9 @@ export default function Page() {
 }
 
 function get_resumes() {
+  //TODO: return a list of resume names or links
+
+  //filler
   let resumes = [];
   for (let i = 0; i < 100; i++){
     resumes.push(i);
@@ -69,5 +73,7 @@ function get_resumes() {
 }
 
 function get_resumes_graded() {
+  // TODO: implement way to get number of resumes graded 
   return 3;
 }
+
