@@ -5,7 +5,7 @@ const Club = (props) => {
   
   return ( 
     
-    <button className={dash_styles.AddButton} onClick={props.onClick}>{props.text}</button> 
+    <button className={dash_styles.AddButton}>Add Club</button> 
     
   ); 
 } 
