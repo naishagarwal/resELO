@@ -1,8 +1,10 @@
 import dash_styles from './dashboard.module.css';
 import { useState } from 'react'; 
 import { AddClub } from './add_club.js'; 
+import {Link} from 'react-router-dom'
 
 //TODO: One issue is the buttons disappear when I refresh the page
+//this is because it is not being stored in databse rn; need to save clubs in database 
 
 function User_Dashboard() { 
   const [inputValue, setInputValue] = useState('');
@@ -40,7 +42,9 @@ function User_Dashboard() {
          {components.map((club, i) => (
           //TODO: Make the button each have its own Club Page
             <div key={i}>
-              <AddClub text={club.service}></AddClub>
+              <Link to={`/club/${club.service}`}>
+                <AddClub text={club.service}></AddClub>
+              </Link>
             </div>
           ))}
       </div>

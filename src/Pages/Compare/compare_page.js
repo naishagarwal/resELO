@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import compare_styles from './compare_style.module.css';
+import {useNavigate} from 'react-router-dom'
 
 function Resume({ pdf_link, onButtonClick }) {
     return (
@@ -18,6 +19,7 @@ function get_pdf_link() { //placeholder fucntion, might actually have to be one 
 }
 
 export default function Page() {
+    const navigate = useNavigate()
     const [pdf_1_link, setPdf_1_link] = useState(get_pdf_link()); //replace with function that returns the link
     const [pdf_2_link, setPdf_2_link] = useState(get_pdf_link()); //replace with function that returns the link
     document.body.style.backgroundColor = '#3f4f37cc';
@@ -31,6 +33,7 @@ export default function Page() {
 
     function back() {
         //TODO: Go back to the club page
+        navigate('/club-page')
     }
 
     return (
