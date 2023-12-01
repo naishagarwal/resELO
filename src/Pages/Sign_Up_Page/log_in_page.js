@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import sign_up_styles from './sign_up_style.module.css';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
-function sign_up () {
+function Log_In () {
     document.body.style.backgroundColor = '#3f4f37cc'; /*sets background color to green*/
 
     const [email, setEmail] = useState("");
@@ -15,20 +15,18 @@ function sign_up () {
             alert('Email and Password cannot be empty!');
             return;
         }
+
         const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
+        signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed up 
+            // Signed in 
             const user = userCredential.user;
-            /*TODO: Redirect to the user dashboard page once successful instead of alert*/
-            alert('New Account Created! ' + user);
-            // ...
+            alert('Logged in! ' + user);
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             alert(errorMessage);
-            // ..
         });
         setEmail("");
         setPassword("");
@@ -42,7 +40,7 @@ function sign_up () {
     return (
         <div className={sign_up_styles.sign_up_container}>
             <button className={sign_up_styles.exit_button} onClick={handleExit}>X</button>
-            <h1>Create An Account</h1>
+            <h1>Log In</h1>
             <form 
                 className={sign_up_styles.form_container} 
                 onSubmit={(e) => {e.preventDefault(); handleSubmit(); }}
@@ -72,10 +70,10 @@ function sign_up () {
                 <button className={sign_up_styles.submit_button} type="submit" >Submit</button>
             </form>
 
-            <button className={sign_up_styles.sign_in_button} >Already have an account? Sign In</button>
+            <button className={sign_up_styles.sign_in_button} >Don't have an account? Create An Account</button>
         </div>
     );
 
 }
 
-export default sign_up;
+export default Log_In;
