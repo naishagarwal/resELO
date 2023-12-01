@@ -1,5 +1,4 @@
 const express = require('express')
-
 const app = express()
 const port = 4000
 const path = require('path');
@@ -13,6 +12,9 @@ const {get_multer_object} = require('./upload_pdf.js');
 const upload_pdf = get_multer_object(resume_db)
 resume_db.populate_database("test");
 
+
+// have something here to make sure users.json file is empty when first starting the server up
+//I think the user.json file does not have to exist, will create automatically, but should test this out 
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -46,6 +48,30 @@ app.get("/club_info/*", express.json(), (req, res) => {
   });
 });
 
+app.post('/signup', (req, res) => {
+  //storing username and password
+  const {username, password} = req.body;
+  
+  //load existing users
+  let users = JSON.parse(fs.readFileSync('users.json', 'utf-8'))
+
+  //check if user already exists
+  if (users.some(user => user.username == username)){
+    res.send("User already exists")
+  }
+
+  //adding new user
+  users.push({username, password})
+  //adding new user to file (JSON.stringfy is converting javascript to JSON string)
+  fs.writeFileSync('users.json', JSON.stringify(users, null))
+
+  //sending success message
+  res.send('User signed up sucessfully')
+
+  
+}
+
+)
 
 app.post('/update_scores', express.json(), (req, res) => {
   

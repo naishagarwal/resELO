@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import compare_styles from './compare_style.module.css';
+import {useNavigate} from 'react-router-dom'
 
 function Resume({ resume,  onButtonClick }) {
     return (
@@ -56,15 +57,18 @@ function winClick(win, lose, club_name, setPdf_1_link, setPdf_2_link) {
 }
 
 
-function back() {
-    window.location.href = '/club-page';
-}
 
 export default function Page({club_name}) {
+    const navigate = useNavigate();
     const [pdf_1_link, setPdf_1_link] = useState('http://localhost:4000/resumes/test/llama.pdf');
     const [pdf_2_link, setPdf_2_link] = useState('http://localhost:4000/resumes/test/2.pdf');
 
     document.body.style.backgroundColor = '#3f4f37cc';
+
+    function back() {
+        //TODO: Go back to the club page
+        navigate('/club-page');
+    }
 
     return (
         <div>
