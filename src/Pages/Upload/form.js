@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function FileUpload() {
+function FileUpload({club_name}) {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -12,7 +12,7 @@ function FileUpload() {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      fetch('http://localhost:4000/upload', {
+      fetch('http://localhost:4000/upload/'+club_name, {
         method: 'POST',
         body: formData,
       })

@@ -13,9 +13,9 @@ const App = () => {
    <BrowserRouter>
       <Routes>
          {/* <Route path="/" element={<Home />} /> */}
-         <Route path="/compare" element={<Compare />} />
+         <Route path="/compare"  element={<Compare club_name="test" />} />
+         <Route path="/Upload/*" element={<Upload />} />
          <Route path="/signup" element={<SignUp />} />
-         <Route path="/upload" element={<Upload />} />
          <Route path = "/club/:clubName" element = {<Club_Page />} />
          <Route path="/dashboard" element={<User_Dashboard />} />
       </Routes>
