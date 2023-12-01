@@ -24,9 +24,14 @@ function sign_up () {
         setPassword("");
     }
 
+    function handleExit(){
+        /*TODO: Redirect to the home page*/
+    }
+
 
     return (
         <div className={sign_up_styles.sign_up_container}>
+            <button className={sign_up_styles.exit_button} onClick={handleExit}>X</button>
             <h1>Create An Account</h1>
             <form 
                 className={sign_up_styles.form_container} 

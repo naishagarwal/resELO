@@ -4,6 +4,16 @@
     --pdf_height: 650px;
     --font: Trebuchet MS
   }
+
+.exit_button {
+  background: var(--interactive-transparent-enabled, rgba(0, 0, 0, 0.00));
+  color: #FFF;
+  border: 0px solid #FFF;
+  font-size: 28px;
+  text-align: right;
+  display: 'flex';
+  justify-content: 'flex-end';
+}
   
 .sign_up_container {
   display: flex;
