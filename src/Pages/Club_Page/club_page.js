@@ -1,5 +1,7 @@
 import React from 'react';
 import club_styles from './club_page_style.module.css';
+import {useParams} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 function Counter({resumes_graded, total_resumes}) {
   const graded = Number(resumes_graded);
@@ -27,6 +29,8 @@ function Resumes({resumes}){ // Do we want resumes to be a link that can prese n
 }
 
 export default function Page() {
+  const {clubName} = useParams()
+  const navigate = useNavigate()
   const resume_list = get_resumes(); // replace with function to return list of resume objects
   const resumes_total = resume_list.length;
   const resumes_graded = get_resumes_graded(); // replace with function to return number of graded resumes
@@ -35,10 +39,13 @@ export default function Page() {
 
   function back(){
     //TODO: go back to clubs page
+    navigate('/dashboard')
+
   }
 
   function compare(){
     //TODO: go to resume comparison page
+    navigate('/compare')
   }  
 
   document.body.style.backgroundColor = "#3f4f37cc";
@@ -46,7 +53,7 @@ export default function Page() {
   return(
     <div>
       <button className={club_styles.backButton} onClick={back}> Back to Clubs page </button>
-      <h1> Club Page </h1>
+      <h1> {clubName} Page </h1>
       <div className={club_styles.contentContainer}>
         <div className={club_styles.content}>
           <Resumes resumes={resume_list} ></Resumes>
