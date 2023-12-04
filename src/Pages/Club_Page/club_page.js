@@ -55,7 +55,7 @@ export default function Page() {
   
   return (
     <div>
-      <button className={club_styles.backButton} onClick={back}> Back to Clubs page </button>
+      <button className={club_styles.backButton} onClick={back}> Back to Dashboard </button>
       <h1> {clubName} Page </h1>
       <div className={club_styles.contentContainer}>
         <div className={club_styles.content1}>
