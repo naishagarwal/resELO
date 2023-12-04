@@ -11,8 +11,12 @@ import { getAuth, } from "firebase/auth";
 function User_Dashboard() { 
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
-  const [components, setComponents] = useState([]);
+  //TODO: Component (List of the user's clubs) needs to be pulled from database
+  const [components, setComponents] = useState([]); 
   document.body.style.backgroundColor = "#FCF9F5";
+  const auth = getAuth();
+  const user = auth.currentUser;
+
 
   const addComponent = (e) => {
     setInputValue(e.target.value);
@@ -20,23 +24,33 @@ function User_Dashboard() {
   };
 
   const addComponentChange = () => {
-    /* TODO: CHECK FOR DUPLICATE NAME*/
     if (inputValue == ""){
       return;
+    }
+    /* TODO: CHECK FOR DUPLICATE NAME*/
+
+    if (user) { //if user is logged in
+      user.getIdToken().then((idToken) => {
+        // idToken is the user token (JWT), need to verify this token on the server side
+        console.log('User Token:', idToken);
+        /* TODO: ADD CLUB TO DATABASE*/
+      });
+    }
+    else {
+      alert("Please Log In");
     }
     setComponents([...components, { service: inputValue }]);
     setInputValue('');
   };
 
-  function logout() { //untested
-    const auth = getAuth();
+  function logout() {
     auth.signOut()
       .then(() => {
         // Redirect to home page
         navigate("/");
       })
       .catch((error) => {
-        alert('Error signing out:', error);
+        alert('Error logging out:', error);
       });
     }
 
