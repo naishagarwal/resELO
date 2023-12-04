@@ -66,7 +66,6 @@ export default function Page({club_name}) {
     document.body.style.backgroundColor = '#3f4f37cc';
 
     function back() {
-        //TODO: Go back to the club page
         navigate('/club-page');
     }
 
