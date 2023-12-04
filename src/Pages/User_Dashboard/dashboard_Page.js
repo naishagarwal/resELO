@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AddClub } from './add_club.js'; 
 import {Link} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
-import { getAuth, } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 //TODO: One issue is the buttons disappear when I refresh the page
 //this is because it is not being stored in databse rn; need to save clubs in database 
@@ -11,8 +11,12 @@ import { getAuth, } from "firebase/auth";
 function User_Dashboard() { 
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
-  const [components, setComponents] = useState([]);
+  //TODO: Component (List of the user's clubs) needs to be pulled from database
+  const [components, setComponents] = useState([]); 
   document.body.style.backgroundColor = "#FCF9F5";
+  const auth = getAuth();
+  const user = auth.currentUser;
+
 
   const addClub = () => {
     // setComponents([{club_name: "a"}, ...components]);
@@ -42,15 +46,14 @@ function User_Dashboard() {
     });
   };
 
-  function logout() { //untested
-    const auth = getAuth();
+  function logout() {
     auth.signOut()
       .then(() => {
         // Redirect to home page
         navigate("/");
       })
       .catch((error) => {
-        alert('Error signing out:', error);
+        alert('Error logging out:', error);
       });
     }
 

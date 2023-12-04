@@ -1,13 +1,11 @@
 const { update_scores } = require('./file_info');
 const fs = require('fs');
 
-//const fire_database = firebase.database()
-
 class User_Database {
     constructor(database) {
         this.db = database;
         //Clubs is JSON column that holds array of clubs for each user
-        this.db.run('CREATE TABLE IF NOT EXISTS user_info (UID INTEGER, Email TEXT, Clubs JSON)');
+        this.db.run('CREATE TABLE IF NOT EXISTS user_info (UID TEXT, Email TEXT, Clubs JSON)');
     }
 
     
@@ -15,10 +13,22 @@ class User_Database {
         return new Promise((resolve, reject) => {
             let sql = `INSERT INTO user_info(UID, email ) VALUES(?, ?)`;
             this.db.run(sql, [UID, email], function (err) {
-                if (err) reject(err);
+                if (err) console.log(err) //reject(err);
                 resolve();
             });
     }   );
+    }
+
+    get_all_users() {
+        return new Promise((resolve, reject) => {
+            this.db.all("SELECT * FROM user_info", [], (err, rows) => {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+                resolve(rows);
+            });
+        });
     }
 
     add_club(UID, club_name) {
