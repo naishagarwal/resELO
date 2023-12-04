@@ -14,18 +14,32 @@ function User_Dashboard() {
   const [components, setComponents] = useState([]);
   document.body.style.backgroundColor = "#FCF9F5";
 
-  const addComponent = (e) => {
-    setInputValue(e.target.value);
-    
-  };
-
-  const addComponentChange = () => {
-    /* TODO: CHECK FOR DUPLICATE NAME*/
-    if (inputValue == ""){
-      return;
-    }
-    setComponents([...components, { service: inputValue }]);
-    setInputValue('');
+  const addClub = () => {
+    // setComponents([{club_name: "a"}, ...components]);
+    fetch('http://localhost:4000/add_club', {
+      mode : 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 123,
+      },
+      method: 'post',
+      body: JSON.stringify({
+        club_name: inputValue,
+      })
+    }).then((response) => {
+      setInputValue('');
+      setComponents([{club_name: inputValue}]);
+    }).catch((error) => {
+      console.log(error);
+      console.log("HEHE")
+      if(error.message == "Club already exists"){
+        alert("Club already exists");
+        setInputValue(['incorrect amc']);
+      } else {
+        alert(error.message);
+      }
+    });
   };
 
   function logout() { //untested
@@ -41,7 +55,7 @@ function User_Dashboard() {
     }
 
   return (
-    <form>
+    <span>
       <div className={dash_styles.buttonDisplay}>
       <button className={dash_styles.LogOutButton}
                   onClick={logout}>Log Out</button>
@@ -49,27 +63,26 @@ function User_Dashboard() {
           <div className={dash_styles.input}>
             <div>
               <input className={dash_styles.input_field}
-                name="service"
                 type="text"
                 value={inputValue}
-                onChange={addComponent}
+                onChange={ (e) => {setInputValue(e.target.value)} }
                 required
               />
-                <button className={dash_styles.AddButton}
-                  onClick={addComponentChange}>Add Club</button>
+                <button type="button" className={dash_styles.AddButton}
+                  onClick={addClub}>Add Club</button>
             </div>
           </div>
       </div>
       <div className="output">
          {components.map((club, i) => (
             <div key={i}>
-              <Link to={`/club/${club.service}`}>
-                <AddClub text={club.service}></AddClub>
+              <Link to={`/club/${club.club_name}`}>
+                <AddClub text={club.club_name}></AddClub>
               </Link>
             </div>
           ))}
       </div>
-    </form>
+    </span>
   );
 }
 

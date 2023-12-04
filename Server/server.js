@@ -46,6 +46,28 @@ app.use(function (req, res, next) {
 
 app.use('/resumes', express.static(path.join(__dirname, 'database/clubs')));
 
+app.post('/add_club', express.json(), (req, res) => {
+  if (!req.headers.authorization) {
+    console.log("No credentials");
+    res.status(401).json({ message: 'Credentials needed' });
+    return;
+  }
+  let club_name = req.body.club_name;
+  resume_db.create_club(club_name).then(() => {
+
+    user_db.add_club(req.headers.authorization, club_name).then(() => {
+      console.log("Club added to user");
+    }).catch((err) => {
+      console.log(err);
+      res.status(400).json({ message: err });
+    });
+
+  }).catch((err) => {
+    console.log(err);
+    res.status(400).json({ message: err });
+  });
+});
+
 app.get('/get_next_resumes/*', (req, res) => {
   let club_name = req.originalUrl.split('/')[2];
 

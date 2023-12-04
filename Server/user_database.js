@@ -13,7 +13,7 @@ class User_Database {
     
     add_user(UID, email) {
         return new Promise((resolve, reject) => {
-            let sql = `INSERT INTO user_info(UID, email ) VALUES(?, ?, ?, ?)`;
+            let sql = `INSERT INTO user_info(UID, email ) VALUES(?, ?)`;
             this.db.run(sql, [UID, email], function (err) {
                 if (err) reject(err);
                 resolve();

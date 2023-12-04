@@ -5,8 +5,20 @@ const fs = require('fs');
 class Resume_Database {
     constructor(database) {
         this.db = database;
+        this.db.run('CREATE TABLE IF NOT EXISTS clubs (club_name TEXT PRIMARY KEY UNIQUE)');
         this.db.run('CREATE TABLE IF NOT EXISTS resume_info (id INTEGER PRIMARY KEY AUTOINCREMENT, club_name TEXT, pdf_name TEXT, elo INTEGER, games_played INTEGER)');
     }
+    
+    create_club(club_name) {
+        return new Promise((resolve, reject) => {
+            let sql = `INSERT INTO clubs(club_name) VALUES(?)`;
+            this.db.run(sql, [club_name], function (err) {
+                if (err) reject("Club already exists");
+                resolve();
+            });
+        });
+    }
+    
     //populate database if does not already exist
     populate_database(club_name) {
         fs.readdir(__dirname + '/database/clubs/' + club_name, (err, files) => {
@@ -54,20 +66,6 @@ class Resume_Database {
         });
     }
 
-    get_resume_elo(club_name, pdf) {
-        return new Promise((resolve, reject) => {
-            let sql = `SELECT elo FROM resume_info WHERE club_name = ? AND pdf_name = ?`;
-            this.db.get(sql, [club_name, pdf], (err, row) => {
-                if (err) return console.error(err.message);
-                if (row) {
-                    resolve(row.elo);
-                } else {
-                    resolve(-1);
-                }
-            });
-        });
-    }
-
     get_all_rows(table_name, cb) {
         let sql = `SELECT * FROM ${table_name}`;
         this.db.all(sql, [], (err, rows) => {
@@ -99,6 +97,20 @@ class Resume_Database {
             });
         }
         );
+    }
+
+    get_club_resumes(club_name) {
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT pdf_name FROM resume_info WHERE club_name = ?`;
+            this.db.all(sql, [club_name], (err, rows) => {
+                if (err) return console.error(err.message);
+                if (rows.length == 0) {
+                    resolve(null);
+                } else {
+                    resolve(rows.map(row => row.pdf_name));
+                }
+            });
+        });
     }
 
     get_club_info(club_name) {

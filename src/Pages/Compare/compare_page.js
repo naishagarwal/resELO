@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import compare_styles from './compare_style.module.css';
-import {useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom';
 
 function Resume({ resume,  onButtonClick }) {
     return (
