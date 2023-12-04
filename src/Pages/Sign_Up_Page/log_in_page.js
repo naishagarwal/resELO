@@ -7,6 +7,7 @@ import {useNavigate} from 'react-router-dom'
 
 function Log_In () {
     const navigate = useNavigate();
+    const auth = getAuth();
     document.body.style.backgroundColor = '#3f4f37cc'; /*sets background color to green*/
 
     const [email, setEmail] = useState("");
@@ -18,7 +19,6 @@ function Log_In () {
             return;
         }
 
-        const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
