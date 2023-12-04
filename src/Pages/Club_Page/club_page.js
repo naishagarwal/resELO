@@ -51,10 +51,10 @@ export default function Page() {
       <button className={club_styles.backButton} onClick={back}> Back to Clubs page </button>
       <h1> Club Page </h1>
       <div className={club_styles.contentContainer}>
-        <div className={club_styles.content}>
+        <div className={club_styles.content1}>
           <Resumes resumes={search_results} handleSearch={handleSearch} ></Resumes>
         </div>
-        <div className={club_styles.content}>
+        <div className={club_styles.content2}>
           <Stats stats_array={stats_array}></Stats>
           <div className={club_styles.compareButton} onClick={compare}> Compare </div>
         </div>
@@ -78,6 +78,12 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
    <div className={club_styles.scrollTitleWithSearchBar}>
              <div className={club_styles.scrollTitle}> Club Resumes </div>
              <SearchBar handleSearch={handleSearch} />
+   </div>
+   <div className={club_styles.scrollTitleCategories}>
+    <div>Rank:</div>
+    <div>Name:</div>
+    <div>ELO:</div>
+    <div>Resume:</div>
    </div>
    {resumeItems}
   </div>)
