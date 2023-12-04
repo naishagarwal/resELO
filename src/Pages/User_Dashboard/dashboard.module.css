@@ -14,7 +14,6 @@
     background-color: #C1A88A;
     border-radius: 5px;
     padding: 5px;
-    margin: 0px;
   }
   
   .LogOutButton{
@@ -42,7 +41,10 @@
     background-color: #3F4F37;
     border-radius: 10px;
     padding: 10px;
+    padding-bottom: 20px;
     margin: 10px;
+    text-align: center;
+
   
   }
   

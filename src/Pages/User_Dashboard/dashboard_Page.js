@@ -17,9 +17,14 @@ function User_Dashboard() {
 
   const addComponent = (e) => {
     setInputValue(e.target.value);
+    
   };
 
   const addComponentChange = () => {
+    /* TODO: CHECK FOR DUPLICATE NAME*/
+    if (inputValue == ""){
+      return;
+    }
     setComponents([...components, { service: inputValue }]);
     setInputValue('');
   };
