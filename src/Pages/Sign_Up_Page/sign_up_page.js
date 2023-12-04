@@ -38,9 +38,7 @@ function sign_up () {
         .then(data => {
             signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                alert('Account Created + Logged in! ');
                 navigate('/dashboard');
-                //TODO: redirect to user dashboard, change after user dashboard link change 
             })
             .catch((error) => {
                 const errorCode = error.code;
