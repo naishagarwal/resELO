@@ -80,23 +80,31 @@ app.post('/signup', express.json(), (req, res) => {
     password: password,
     disabled: false
   })
-  .then((userRecord) => {
+  .then(async (userRecord) => {
       console.log("User Record:", userRecord);
       const userId = userRecord.uid;
-      user_db.add_user(userId, email) //adding user to the current user database
-      const userRef = admin.database().ref('users/' + userId);
+      console.log("user id is ", userId)
+      console.log("email is ", email)
+      try {
+        await user_db.add_user(userId, email) //adding user to the current user database, waiting for promise
+        console.log("user added to local databse")
+        //console.log(user_db)
 
-      userRef.set({
-        email: email,
-        UID: userId
-      })
-      .then(() => {
-          //get auth token here and return
-          return res.status(201).send({uid: userRecord.uid});
-      })
-  .catch ((error) => {
-    return res.status(500).send({error: error.message})
-  });
+        const users = await user_db.get_all_users();
+        console.log("all users", users)
+
+        const userRef = admin.database().ref('users/' + userId);
+
+        await userRef.set({
+          email: email,
+          UID: userId
+        })
+        console.log("user added to firebase database")
+        return res.status(201).send({uid: userRecord.uid});
+      } catch (error) {
+        console.error("error in user addition", error);
+        return res.status(500).send({error: error.message})
+      }
 
 })
 .catch((error) => {
