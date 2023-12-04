@@ -7,26 +7,36 @@
 .contentContainer{
   display:flex;
   width: 100%;
-  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: baseline;
 }
 
-.content{
+.content1{
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   margin: 20 auto;
-  width: 50%;
+  width: 65%;
+}
+
+.content2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 20 auto;
+  width: 35%;
 }
 
 
 
 .scrollContainer {
   height: 600px;
-  width: 400px;
+  width: 700px;
+  align-items: flex-start;
   display: flex;
   margin: 0 auto;
   border: 1px solid #000;
@@ -41,12 +51,53 @@
  background-color: var(--background);
  background: solid;
  padding: 10px;
- display: flex solid;
- border: 1px solid #000;
+ display: flex;
  text-align: center;
+ width: 100%;
  /* font styling */
  font-family: var(--font);
  color: #FFF;
+}
+
+.scrollTitleWithSearchBar {
+  position: sticky;
+  width: 100%;
+  height: 50px;
+  top: 0;
+  background-color: var(--background);
+  background: solid;
+  padding: 10px;
+  display: flex;
+  border: 1px solid #000;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.scrollTitleCategories {
+  position: sticky;
+  top: 50px;
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  background-color: #FFF;
+  border: 1px solid #000;
+  height: 2em;
+  padding-inline: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  font-size:16px;
+  font-family: var(--font);
+
+  box-sizing: border-box;
+  z-index: 1;
 }
 
 
@@ -54,29 +105,33 @@
   margin: 0px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   width: 100%;
+  justify-content: space-between;
   border: 1px solid #000;
   height: 2em;
-  font-size: 10px;
-  padding-left: 20px;
+  padding-inline: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  font-size:16px;
   font-family: var(--font);
+
+  box-sizing: border-box;
 }
 
 
-.counter {
+.stats {
   display: flex;
   flex-direction: column; /* Stack elements vertically */
   justify-content: flex-start;
   align-items: center;
   margin: 0 auto;
-  width: 200px;
-  height: 150px; /* Increased height to accommodate title bar and content */
+  width: 400px;
+  height: 90px; /* Increased height to accommodate title bar and content */
   background-color: #ffffff;
   border: 2px solid #000;
   margin: 50px;
   /* font style */
-  font-size: 32px;
   font-family: var(--font);
   box-sizing: border-box;
 }
@@ -89,22 +144,22 @@
   align-items: center;
   background-color: var(--background);
   color: #FFF;
-  padding: 8px;
+  padding: 6px;
   border-bottom: 2px solid #000;
   width: 100%;
   text-align: center;
   font-family: var(--font);
   box-sizing: border-box;
+  font-size: 28px;
 }
 
 /* Styles for the content area */
 .Countercontent {
   display: flex; /* Use flexbox */
-  justify-content: center; /* Align horizontally at the center */
+  justify-content: flex-start; /* Align horizontally at the center */
   align-items: center; /* Align vertically at the center */
   padding: 10px;
   text-align: center; /* Align text at the center */
-  line-height: 100%
 }
 
 .headerContainer{ /* not currently in use */
@@ -187,3 +242,4 @@ h1 {
   font-weight: 600;
   line-height: 30px; /* 71.429% */
 }
+
