@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { AddClub } from './add_club.js'; 
 import {Link} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
-import firebase from "firebase/auth";
 import { getAuth, } from "firebase/auth";
 
 //TODO: One issue is the buttons disappear when I refresh the page
