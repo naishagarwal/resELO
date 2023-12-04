@@ -2,10 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import sign_up_styles from './sign_up_style.module.css';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {useNavigate} from 'react-router-dom'
 
 
 function Log_In () {
     document.body.style.backgroundColor = '#3f4f37cc'; /*sets background color to green*/
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -33,7 +35,11 @@ function Log_In () {
     }
 
     function handleExit(){
-        /*TODO: Redirect to the home page*/
+        navigate("/");
+    }
+
+    function goToSignUp(){
+        navigate("/sign-up");
     }
 
 
@@ -74,7 +80,7 @@ function Log_In () {
                     <button className={sign_up_styles.submit_button} type="submit" >Submit</button>
                 </form>
 
-                <button className={sign_up_styles.sign_in_button} >Don't have an account? Create An Account</button>
+                <button className={sign_up_styles.sign_in_button} onClick={goToSignUp} >Don't have an account? Create An Account</button>
             </div>
         </div>
     );

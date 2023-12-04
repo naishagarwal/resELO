@@ -13,15 +13,16 @@ const Home = () => {
                 The premier resume ranking app! Simply have your applicants upload their resumes, and let the easy ranking begin!
             </h2>
             <div className={home_styles.buttons}>
-            <Link to="./Pages/SignUp/signup_page"><button className={home_styles.account_button}>
-                    SIGN IN
+            <Link to="/login"><button className={home_styles.account_button}>
+                    LOG IN
                 </button>
                 </Link>
             </div>
             <div className={home_styles.buttons}>
-                <button className={home_styles.account_button}>
+                <Link to="/sign-up"><button className={home_styles.account_button}>
                     CREATE ACCOUNT
                 </button>
+                </Link>
             </div>
         </div>
 
