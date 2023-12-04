@@ -1,0 +1,85 @@
+import React from 'react';
+import { useState } from 'react';
+import sign_up_styles from './sign_up_style.module.css';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+
+function sign_up () {
+    document.body.style.backgroundColor = '#3f4f37cc'; /*sets background color to green*/
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    function handleSubmit() {
+        if (email === "" || password === ""){
+            alert('Email and Password cannot be empty!');
+            return;
+        }
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed up 
+            const user = userCredential.user;
+            /*TODO: Redirect to the user dashboard page once successful instead of alert*/
+            alert('New Account Created! ' + user);
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorMessage);
+            // ..
+        });
+        setEmail("");
+        setPassword("");
+    }
+
+    function handleExit(){
+        /*TODO: Redirect to the home page*/
+    }
+
+
+    return (
+        <div>
+            <button className={sign_up_styles.exit_button} onClick={handleExit}>X</button>
+            <div className={sign_up_styles.sign_up_container}>
+                <h1>Create An Account</h1>
+                <form 
+                     
+                    onSubmit={(e) => {e.preventDefault(); handleSubmit(); }}
+                > 
+                    <div className={sign_up_styles.input_container}>
+                        <label>
+                            Email:
+                            <input 
+                                className={sign_up_styles.input_box} 
+                                type="text" 
+                                value = {email}
+                                placeholder="Email" 
+                                onChange={(e) => setEmail(e.target.value)}>
+                            </input>
+                        </label>
+                    </div>
+                    <div className={sign_up_styles.input_container}>
+                        <label>
+                            Password:
+                            <input 
+                                className={sign_up_styles.input_box} 
+                                type="password" 
+                                value = {password}
+                                placeholder="Password" 
+                                onChange={(e) => setPassword(e.target.value)}>
+                            </input>
+                        </label>
+                    </div>
+                    <button className={sign_up_styles.submit_button} type="submit" >Submit</button>
+                </form>
+
+                <button className={sign_up_styles.sign_in_button} >Already have an account? Sign In</button>
+            </div>
+        </div>
+    );
+
+}
+
+export default sign_up;

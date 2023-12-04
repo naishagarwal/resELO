@@ -8,6 +8,7 @@ function Resume({ resume,  onButtonClick }) {
         <div className={compare_styles.resumeContainer}>
             <iframe src={resume} className={compare_styles.pdf} />
             <button className={compare_styles.resumeButton} onClick={onButtonClick}> This One </button>
+            <text> {resume.elo} </text>
         </div>
     );
 }
@@ -69,7 +70,6 @@ export default function Page({club_name}) {
     }, []);
 
     function back() {
-        //TODO: Go back to the club page
         navigate('/club-page');
     }
 
