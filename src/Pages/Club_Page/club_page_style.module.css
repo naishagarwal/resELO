@@ -27,6 +27,7 @@
 .scrollContainer {
   height: 600px;
   width: 400px;
+  align-items: flex-start;
   display: flex;
   margin: 0 auto;
   border: 1px solid #000;
@@ -41,8 +42,9 @@
  background-color: var(--background);
  background: solid;
  padding: 10px;
- display: flex solid;
+ display: flex;
  text-align: center;
+ width: 100%;
  /* font styling */
  font-family: var(--font);
  color: #FFF;
@@ -50,16 +52,18 @@
 
 .scrollTitleWithSearchBar {
   position: sticky;
+  width: 100%;
   top: 0;
   background-color: var(--background);
   background: solid;
   padding: 10px;
-  display: flex solid;
+  display: flex;
   border: 1px solid #000;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 
@@ -67,13 +71,19 @@
   margin: 0px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   width: 100%;
+  justify-content: space-between;
   border: 1px solid #000;
   height: 2em;
   font-size: 10px;
-  padding-left: 20px;
+  padding-inline: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  font-size:16px;
   font-family: var(--font);
+
+  box-sizing: border-box;
 }
 
 

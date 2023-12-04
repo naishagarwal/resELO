@@ -65,7 +65,12 @@ export default function Page() {
 
 function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link that can prese nt the pdf or just a name
   const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
-     <div className={club_styles.resumeContainer} key={index}>{resume}</div>
+     <div className={club_styles.resumeContainer} key={index}>
+      <div>Rank</div>
+      <div>Name</div>
+      <div> ELO </div>
+      <div>{resume}</div>
+     </div>
      )
    );
  
