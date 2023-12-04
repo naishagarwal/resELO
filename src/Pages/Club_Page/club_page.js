@@ -2,14 +2,18 @@ import React, {useState } from 'react';
 import SearchBar from './SearchBar';
 import club_styles from './club_page_style.module.css';
 
-function Counter({resumes_graded, total_resumes}) {
-  const graded = Number(resumes_graded);
-  const total = Number(total_resumes);
+function Stats({stats_array}) {
+
+  const confidence_score = stats_array[0];
+  const resumes_graded = stats_array[1]
+
   return (
     <>
-      <div className={club_styles.counter}> 
-        <div className={club_styles.titleBar}> Counter </div>
-        <div className={club_styles.counterContent}>{graded} / {total}</div>
+      <div className={club_styles.stats}> 
+        <div className={club_styles.titleBar}> Stats </div>
+        <div className={club_styles.counterContent}>  Confidence Score: {confidence_score}% <br />
+        Resumes Graded: {resumes_graded} {'\n'}
+        </div>
       </div>
     </>
   )
@@ -24,7 +28,7 @@ export default function Page() {
   const resume_list = get_resumes();
   const [search_results, set_search_results] = useState(resume_list);
   const resumes_total = resume_list.length;
-  const resumes_graded = get_resumes_graded(); // replace with function to return number of graded resumes
+  const stats_array = get_stats_array(); // replace with function to return number of graded resumes
 
   const handleSearch = (searchTerm) => {
     const filteredResults = resume_list.filter(item => item.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -51,7 +55,7 @@ export default function Page() {
           <Resumes resumes={search_results} handleSearch={handleSearch} ></Resumes>
         </div>
         <div className={club_styles.content}>
-          <Counter resumesGraded={resumes_graded} resumeTotal={resumes_total}></Counter>
+          <Stats stats_array={stats_array}></Stats>
           <div className={club_styles.compareButton} onClick={compare}> Compare </div>
         </div>
       </div>
@@ -88,9 +92,9 @@ function get_resumes() {
   return resumes;
 }
 
-function get_resumes_graded() {
+function get_stats_array() {
   // TODO: implement way to get number of resumes graded 
-  return 3;
+  return [84,6];
 }
 
 
