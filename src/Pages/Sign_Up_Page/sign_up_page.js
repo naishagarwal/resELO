@@ -17,14 +17,26 @@ function sign_up () {
             alert('Email and Password cannot be empty!');
             return;
         }
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            /*TODO: Redirect to the user dashboard page once successful instead of alert*/
-            alert('New Account Created! ' + user);
-            // ...
+
+        fetch('http://localhost:4000/signup', {
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'post',
+        body: JSON.stringify({email, password}),
+    })
+        .then(response => {
+            if (!response.ok){
+                //alert("Failed to create account!");
+                throw new Error('failed to create account')
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("new account created")
+            //TODO: redirect to user dashboard instead of alerting. 
         })
         .catch((error) => {
             const errorCode = error.code;

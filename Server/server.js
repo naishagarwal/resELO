@@ -1,20 +1,40 @@
+const firebase = require('firebase/app')
+const auth = require('firebase/auth')
+const analytics = require('firebase/analytics')
+const admin = require('firebase-admin')
+
 const express = require('express')
 const app = express()
 const port = 4000
 const path = require('path');
 var fs = require('fs');
 const Resume_Database = require('./resume_database.js');
+const User_Database = require('./user_database.js')
 const sqlite3 = require('sqlite3').verbose();
 
 let db = new sqlite3.Database(__dirname + '/database/sqlite.db');
 let resume_db = new Resume_Database(db);
+let user_db = new User_Database(db);
 const {get_multer_object} = require('./upload_pdf.js');
 const upload_pdf = get_multer_object(resume_db)
 resume_db.populate_database("test");
 
+const serviceAccount = require('./service_account.json')
 
-// have something here to make sure users.json file is empty when first starting the server up
-//I think the user.json file does not have to exist, will create automatically, but should test this out 
+admin.initializeApp({ //initializing database
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://reselo-default-rtdb.firebaseio.com/"
+})
+
+// Initialize Firebase
+//firebase.initializeApp(firebaseConfig);
+// const auth = getAuth(app);
+// const analytics = getAnalytics(app);
+
+
+const { getDatabase} = require('firebase-admin/database') //getDatabase automatically calls the realDatabase without needing to specify a specific link
+const database = getDatabase() //initializing firebase database
+
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,6 +42,7 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
   next();
 });
+
 
 app.use('/resumes', express.static(path.join(__dirname, 'database/clubs')));
 
@@ -48,30 +69,60 @@ app.get("/club_info/*", express.json(), (req, res) => {
   });
 });
 
-app.post('/signup', (req, res) => {
+
+app.post('/signup', express.json(), (req, res) => {
   //storing username and password
-  const {username, password} = req.body;
-  
-  //load existing users
-  let users = JSON.parse(fs.readFileSync('users.json', 'utf-8'))
+  const {email, password} = req.body; //getting username from request
 
-  //check if user already exists
-  if (users.some(user => user.username == username)){
-    res.send("User already exists")
-  }
+  admin.auth().createUser({
+    email: email,
+    emailVerified: false,
+    password: password,
+    disabled: false
+  })
+  .then((userRecord) => {
+      console.log("User Record:", userRecord);
+      const userId = userRecord.uid;
+      user_db.add_user(userId, email) //adding user to the current user database
+      const userRef = admin.database().ref('users/' + userId);
 
-  //adding new user
-  users.push({username, password})
-  //adding new user to file (JSON.stringfy is converting javascript to JSON string)
-  fs.writeFileSync('users.json', JSON.stringify(users, null))
+      userRef.set({
+        email: email,
+        UID: userId
+      })
+      .then(() => {
+          //get auth token here and return
+          return res.status(201).send({uid: userRecord.uid});
+      })
+  .catch ((error) => {
+    return res.status(500).send({error: error.message})
+  });
 
-  //sending success message
-  res.send('User signed up sucessfully')
+})
+.catch((error) => {
+    console.error('Error creating user:', error);
+    return res.status(500).send({error: error.message})
+});
 
-  
-}
+});
 
-)
+
+// app.get('/login', express.json(), (req, res) => {
+//   //storing username and password
+//   const {username, password} = req.body; //getting username from request
+
+//   firebase.auth().signInWithEmailAndPassword(email, password)
+//       .then((userCredential) => {
+//         const user = userCredential.user;
+//         const userId = user.uid; //user's unique id 
+//       }
+//   )
+
+
+// }
+
+// )
+
 
 app.post('/update_scores', express.json(), (req, res) => {
   
