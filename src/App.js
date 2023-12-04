@@ -6,6 +6,7 @@ import User_Dashboard from './Pages/User_Dashboard/dashboard_Page'
 import Sign_Up from './Pages/Sign_Up_Page/sign_up_page';
 import Home from './Pages/Home_Page/home';
 import Log_In from './Pages/Sign_Up_Page/log_in_page';
+import Error from './Pages/Error_Page/error';
 
 /* Firebase Config*/
 
@@ -45,6 +46,7 @@ const App = () => {
          <Route path="" element={<Home />}/>
          <Route path="/sign-up" element={<Sign_Up />} />
          <Route path="/login" element={<Log_In />} />
+         <Route path="/error" element={<Error />} />
       </Routes>
       </BrowserRouter>
  );
