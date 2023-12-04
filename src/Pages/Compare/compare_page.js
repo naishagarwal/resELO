@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import compare_styles from './compare_style.module.css';
 import {useNavigate} from 'react-router-dom'
+import { getAuth } from "firebase/auth";
 
 function Resume({ resume,  onButtonClick }) {
     return (
@@ -60,13 +61,37 @@ function winClick(win, lose, club_name, setPdf_1_link, setPdf_2_link) {
 
 export default function Page({club_name}) {
     const navigate = useNavigate();
+    const auth = getAuth();
+    const user = auth.currentUser;
     const [pdf_1_link, setPdf_1_link] = useState("");
     const [pdf_2_link, setPdf_2_link] = useState("");
 
     document.body.style.backgroundColor = '#3f4f37cc';
 
+
+    //verifyAccessToResumes returns true if has access to club, false otherwise
+    function verifyAccessToResumes(club_name){
+        if (user) { //if user is logged in
+            user.getIdToken().then((idToken) => {
+              // idToken is the user token (JWT), need to verify this token on the server side
+              //idToken has all the user info you would need
+              console.log('User Token:', idToken);
+              /* TODO: VERIFY ACCESS TO THE CLUB, return true if have access, false otherwise*/
+            });
+        }
+        else{
+            navigate('/login');
+        }
+
+    }
+
     useEffect(() => {
-        get_and_set_pdf_links(club_name, setPdf_1_link, setPdf_2_link)
+        if (verifyAccessToResumes(club_name)){
+            get_and_set_pdf_links(club_name, setPdf_1_link, setPdf_2_link)
+        }
+        else{ //if the user is logged in but doesn't have access to this club
+            navigate('/login');
+        }
     }, []);
 
     function back() {

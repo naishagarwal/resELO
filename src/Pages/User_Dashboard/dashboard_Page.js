@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AddClub } from './add_club.js'; 
 import {Link} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
-import { getAuth, } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 //TODO: One issue is the buttons disappear when I refresh the page
 //this is because it is not being stored in databse rn; need to save clubs in database 
@@ -32,15 +32,16 @@ function User_Dashboard() {
     if (user) { //if user is logged in
       user.getIdToken().then((idToken) => {
         // idToken is the user token (JWT), need to verify this token on the server side
+        //idToken has all the user info you would need
         console.log('User Token:', idToken);
         /* TODO: ADD CLUB TO DATABASE*/
+        setComponents([...components, { service: inputValue }]); //remove this once adding to database impemented
+        setInputValue('');
       });
     }
     else {
       alert("Please Log In");
     }
-    setComponents([...components, { service: inputValue }]);
-    setInputValue('');
   };
 
   function logout() {
