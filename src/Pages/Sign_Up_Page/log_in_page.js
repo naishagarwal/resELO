@@ -41,33 +41,35 @@ function Log_In () {
         <div>
             <button className={sign_up_styles.exit_button} onClick={handleExit}>X</button>
             <div className={sign_up_styles.sign_up_container}>
-                <button className={sign_up_styles.exit_button} onClick={handleExit}>X</button>
                 <h1>Log In</h1>
                 <form 
-                    className={sign_up_styles.form_container} 
                     onSubmit={(e) => {e.preventDefault(); handleSubmit(); }}
                 > 
-                    <label>
-                        Email:
-                        <input 
-                            className={sign_up_styles.input_box} 
-                            type="text" 
-                            value = {email}
-                            placeholder="Email" 
-                            onChange={(e) => setEmail(e.target.value)}>
-                        </input>
-                    </label>
+                    <div className={sign_up_styles.input_container}>
+                        <label>
+                            Email:
+                            <input 
+                                className={sign_up_styles.input_box} 
+                                type="text" 
+                                value = {email}
+                                placeholder="Email" 
+                                onChange={(e) => setEmail(e.target.value)}>
+                            </input>
+                        </label>
+                    </div>
 
-                    <label>
-                        Password:
-                        <input 
-                            className={sign_up_styles.input_box} 
-                            type="password" 
-                            value = {password}
-                            placeholder="Password" 
-                            onChange={(e) => setPassword(e.target.value)}>
-                        </input>
-                    </label>
+                    <div className={sign_up_styles.input_container}>
+                        <label>
+                            Password:
+                            <input 
+                                className={sign_up_styles.input_box} 
+                                type="password" 
+                                value = {password}
+                                placeholder="Password" 
+                                onChange={(e) => setPassword(e.target.value)}>
+                            </input>
+                        </label>
+                    </div>
                         
                     <button className={sign_up_styles.submit_button} type="submit" >Submit</button>
                 </form>
