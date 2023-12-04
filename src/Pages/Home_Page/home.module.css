@@ -9,14 +9,23 @@
   .account_button {
   
     font-size: 20px;
+    box-shadow: #422800 4px 4px 0 0;
     text-align: center;
     background-color: #ECE7E2;
     color: #2A3923;
     border-radius: 5px;
     padding: 10px;
-    margin: 5px;
+    margin: 10px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 
+  }
+
+  .home_logo {
+    max-width: 65%;
+    padding: 15px;
+    margin-left: auto;
+    margin-right: auto;  
+    display: block;
   }
 
   .buttons {
@@ -27,52 +36,31 @@
   
   .info_text {
     text-align: center;
+    box-shadow: #422800 4px 4px 0 0;
     font-size: 25px;
     color: #ECE7E2;
     background-color: #2A3923;
     padding: 40px;
-    margin: 40px;
+    margin: 20px;
     margin-bottom: 20px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
   }
 
   .heading {
     text-align: center;
+    box-shadow: #422800 6px 6px 0 0;
     font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 45px;
-    color: #ECE7E2;
+    color: #2A3923;
+    background-color: #ECE7E2;
     padding-top: 20px;
+    box-shadow: #422800 4px 4px 0 0;
+    border-radius: 5px;
+    padding: 30px;
+    margin: 20px;
+    margin-left: 150px;
+    margin-right: 150px;
   }
 
-  .input_field {
-    padding: 5px;
 
-  }
-  .Component {
-  
-    color: white;
-    font-size: 10px;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    text-align: center;
-    background-color: #3F4F37;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
-  
-  }
-  
-  .title{
-    text-align: center;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 45px;
-    color: #3F4F37;
-    padding-top: 10px;
-  }
-  
-  h1{
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 35px;
-    color: #FCF9F5;
-  }
-  
   
