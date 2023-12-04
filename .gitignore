@@ -2,5 +2,6 @@ node_modules
 .DS_Store
 uploads
 Server/sqlite.db
+Server/database/sqlite.db
 Server/clubs
 Server/service_account.json

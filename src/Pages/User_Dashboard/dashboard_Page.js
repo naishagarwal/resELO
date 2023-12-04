@@ -1,7 +1,7 @@
 import dash_styles from './dashboard.module.css';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { AddClub } from './add_club.js'; 
-import {Link} from 'react-router-dom'
+import {Link, redirect} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 import { getAuth } from "firebase/auth";
 
@@ -14,35 +14,65 @@ function User_Dashboard() {
   //TODO: Component (List of the user's clubs) needs to be pulled from database
   const [components, setComponents] = useState([]); 
   document.body.style.backgroundColor = "#FCF9F5";
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const [auth, setAuth] = useState("");
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) { 
+      setAuth(auth);
+      auth.currentUser.getIdToken().then((idToken) => {
+        fetch('http://localhost:4000/get_clubs', {
+          mode : 'cors',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': idToken,
+          },
+          method: 'get',
+        }).then((response) => { return response.json(); })
+        .then((response) => {
+          console.log(response);
+          setComponents(response.clubs.map((name) => {
+            { return {club_name: name} }
+          }));
+        }).catch((error) => {
+          console.log(error);
+        });
+      });
+    } else {
+      navigate('/login');
+    }
+  }, []);
 
 
   const addClub = () => {
-    // setComponents([{club_name: "a"}, ...components]);
-    fetch('http://localhost:4000/add_club', {
-      mode : 'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 123,
-      },
-      method: 'post',
-      body: JSON.stringify({
-        club_name: inputValue,
-      })
-    }).then((response) => {
-      setInputValue('');
-      setComponents([{club_name: inputValue}]);
-    }).catch((error) => {
-      console.log(error);
-      console.log("HEHE")
-      if(error.message == "Club already exists"){
-        alert("Club already exists");
-        setInputValue(['incorrect amc']);
-      } else {
-        alert(error.message);
-      }
+    auth.currentUser.getIdToken().then((idToken) => {
+      fetch('http://localhost:4000/add_club', {
+        mode : 'cors',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': idToken,
+        },
+        method: 'post',
+        body: JSON.stringify({
+          club_name: inputValue,
+        })
+      }).then((response) => { return response.json(); })
+      .then((response) => {
+        console.log(response);
+        if(response.message == 'Club ' + inputValue + ' already exists') {
+          alert('Club already exists');
+        } else {
+          setInputValue('');
+          setComponents(response.clubs.map((name) => {
+            { return {club_name: name} }
+          }));
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
     });
   };
 

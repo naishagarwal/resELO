@@ -39,7 +39,7 @@ const database = getDatabase() //initializing firebase database
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+  res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, Authorization');
   next();
 });
 
@@ -47,26 +47,68 @@ app.use(function (req, res, next) {
 app.use('/resumes', express.static(path.join(__dirname, 'database/clubs')));
 
 app.post('/add_club', express.json(), (req, res) => {
+  let club_name = req.body.club_name;
   if (!req.headers.authorization) {
     console.log("No credentials");
     res.status(401).json({ message: 'Credentials needed' });
     return;
   }
-  let club_name = req.body.club_name;
-  resume_db.create_club(club_name).then(() => {
+  admin.auth().verifyIdToken(req.headers.authorization)
+  .then((decodedToken) => {
+    return decodedToken.uid;
+  }).then((UID) => {
+    resume_db.create_club(club_name).then(() => {
+      console.log("Club "+club_name+" added to resume database");
+      user_db.add_club(UID, club_name).then(() => {
+        console.log("Club added to user database");
 
-    user_db.add_club(req.headers.authorization, club_name).then(() => {
-      console.log("Club added to user");
+        user_db.get_clubs(UID).then((clubs) => {
+          console.log(clubs);
+          res.status(201).json({ message: 'Club added successfully!', clubs: clubs });
+        }).catch((err) => {
+          console.log(err);
+          res.status(400).json({ message: err });
+        });
+
+      }).catch((err) => {
+        console.log(err);
+        res.status(400).json({ message: err });
+      });
     }).catch((err) => {
       console.log(err);
       res.status(400).json({ message: err });
     });
-
   }).catch((err) => {
-    console.log(err);
+    console.log("AUTHENTICAITON VERIFCIATION FAILED");
     res.status(400).json({ message: err });
   });
 });
+
+
+app.get('/get_clubs', express.json(), (req, res) => {
+  if (!req.headers.authorization) {
+    console.log("No credentials");
+    res.status(401).json({ message: 'Credentials needed' });
+    return;
+  }
+
+  admin.auth().verifyIdToken(req.headers.authorization)
+  .then((decodedToken) => {
+    return decodedToken.uid;
+  }).then((UID) => {
+    user_db.get_clubs(UID).then((clubs) => {
+      console.log(clubs);
+      res.status(200).json({ clubs: clubs });
+    }).catch((err) => {
+      console.log(err);
+      res.status(400).json({ message: err });
+    });
+  }).catch((err) => {
+    console.log("AUTHENTICAITON VERIFCIATION FAILED");
+    res.status(400).json({ message: err });
+  });
+});
+
 
 app.get('/get_next_resumes/*', (req, res) => {
   let club_name = req.originalUrl.split('/')[2];
@@ -101,38 +143,37 @@ app.post('/signup', express.json(), (req, res) => {
     emailVerified: false,
     password: password,
     disabled: false
-  })
-  .then(async (userRecord) => {
-      console.log("User Record:", userRecord);
-      const userId = userRecord.uid;
-      console.log("user id is ", userId)
-      console.log("email is ", email)
-      try {
-        await user_db.add_user(userId, email) //adding user to the current user database, waiting for promise
-        console.log("user added to local databse")
-        //console.log(user_db)
+  }).then((userRecord) => {
+    console.log("User Record:", userRecord);
+    const userId = userRecord.uid;
+    console.log("user id is ", userId)
+    console.log("email is ", email)
 
-        const users = await user_db.get_all_users();
-        console.log("all users", users)
+    user_db.add_user(userId, email).then(() => {
+      console.log("user added to local databse")
+      const users = user_db.get_all_users();
+      console.log("all users", users)
+      const userRef = admin.database().ref('users/' + userId);
 
-        const userRef = admin.database().ref('users/' + userId);
-
-        await userRef.set({
-          email: email,
-          UID: userId
-        })
+      userRef.set({
+        email: email,
+        UID: userId
+      }).then(() => {
         console.log("user added to firebase database")
-        return res.status(201).send({uid: userRecord.uid});
-      } catch (error) {
-        console.error("error in user addition", error);
-        return res.status(500).send({error: error.message})
-      }
+        res.status(201).send({uid: userRecord.uid});
+      }).catch((err) => {
+        console.log(err);
+        res.status(400).json({ message: err });
+      });
 
-})
-.catch((error) => {
+    }).catch((err) => {
+      console.log(err);
+      res.status(400).json({ message: err });
+    });
+  }).catch((error) => {
     console.error('Error creating user:', error);
     return res.status(500).send({error: error.message})
-});
+  });
 
 });
 

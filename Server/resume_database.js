@@ -5,7 +5,7 @@ const fs = require('fs');
 class Resume_Database {
     constructor(database) {
         this.db = database;
-        this.db.run('CREATE TABLE IF NOT EXISTS clubs (club_name TEXT PRIMARY KEY UNIQUE)');
+        this.db.run('CREATE TABLE IF NOT EXISTS clubs (club_name TEXT PRIMARY KEY)');
         this.db.run('CREATE TABLE IF NOT EXISTS resume_info (id INTEGER PRIMARY KEY AUTOINCREMENT, club_name TEXT, pdf_name TEXT, elo INTEGER, games_played INTEGER)');
     }
     
@@ -13,7 +13,7 @@ class Resume_Database {
         return new Promise((resolve, reject) => {
             let sql = `INSERT INTO clubs(club_name) VALUES(?)`;
             this.db.run(sql, [club_name], function (err) {
-                if (err) reject("Club already exists");
+                if (err) reject("Club " + club_name +" already exists");
                 resolve();
             });
         });
