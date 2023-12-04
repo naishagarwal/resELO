@@ -31,8 +31,6 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-
-
 //<Route path="/club/:clubName" component={Club_Page} /> 
 
 const App = () => {
@@ -44,7 +42,7 @@ const App = () => {
          <Route path="/Upload/*" element={<Upload />} />
          <Route path = "/club/:clubName" element = {<Club_Page />} />
          <Route path="/dashboard" element={<User_Dashboard />} />
-         <Route path="/home" element={<Home />}/>
+         <Route path="" element={<Home />}/>
          <Route path="/sign-up" element={<Sign_Up />} />
          <Route path="/login" element={<Log_In />} />
       </Routes>

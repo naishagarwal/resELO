@@ -2,10 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import sign_up_styles from './sign_up_style.module.css';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {useNavigate} from 'react-router-dom'
 
 
 function sign_up () {
     document.body.style.backgroundColor = '#3f4f37cc'; /*sets background color to green*/
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,14 +17,26 @@ function sign_up () {
             alert('Email and Password cannot be empty!');
             return;
         }
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            /*TODO: Redirect to the user dashboard page once successful instead of alert*/
-            alert('New Account Created! ' + user);
-            // ...
+
+        fetch('http://localhost:4000/signup', {
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            method: 'post',
+        body: JSON.stringify({email, password}),
+    })
+        .then(response => {
+            if (!response.ok){
+                //alert("Failed to create account!");
+                throw new Error('failed to create account')
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("new account created")
+            //TODO: redirect to user dashboard instead of alerting. 
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -35,9 +49,12 @@ function sign_up () {
     }
 
     function handleExit(){
-        /*TODO: Redirect to the home page*/
+        navigate("/");
     }
 
+    function goToLogIn(){
+        navigate("/login");
+    }
 
     return (
         <div>
@@ -75,7 +92,7 @@ function sign_up () {
                     <button className={sign_up_styles.submit_button} type="submit" >Submit</button>
                 </form>
 
-                <button className={sign_up_styles.sign_in_button} >Already have an account? Sign In</button>
+                <button className={sign_up_styles.sign_in_button} onClick={goToLogIn} >Already have an account? Sign In</button>
             </div>
         </div>
     );

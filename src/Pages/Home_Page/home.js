@@ -15,15 +15,13 @@ const Home = () => {
             </h2>
             <img src={require('./res_logo.PNG')} alt = "ResELO Logo" className={home_styles.home_logo}/>
             <div className={home_styles.buttons}>
-                <Link to='/login'>
-                    <button className={home_styles.account_button}>
-                        SIGN IN
-                    </button>
-                    </Link>
+            <Link to="/login"><button className={home_styles.account_button}>
+                    LOG IN
+                </button>
+                </Link>
             </div>
             <div className={home_styles.buttons}>
-                <Link to='/sign-up'>
-                <button className={home_styles.account_button}>
+                <Link to="/sign-up"><button className={home_styles.account_button}>
                     CREATE ACCOUNT
                 </button>
                 </Link>

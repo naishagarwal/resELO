@@ -16,6 +16,18 @@
     padding: 5px;
   }
   
+  .LogOutButton{
+    font-size: 15px;
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    right: 5%;
+    background-color: #C1A88A;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0px;
+  }
+  
   .input_field {
     padding: 5px;
 
