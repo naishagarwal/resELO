@@ -67,8 +67,8 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
   const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
      <div className={club_styles.resumeContainer} key={index}>
       <div>Rank</div>
-      <div>Name</div>
-      <div> ELO </div>
+      <div>ELO</div>
+      <div> Name </div>
       <div>{resume}</div>
      </div>
      )
@@ -81,8 +81,8 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
    </div>
    <div className={club_styles.scrollTitleCategories}>
     <div>Rank:</div>
-    <div>Name:</div>
     <div>ELO:</div>
+    <div>Name:</div>
     <div>Resume:</div>
    </div>
    {resumeItems}
