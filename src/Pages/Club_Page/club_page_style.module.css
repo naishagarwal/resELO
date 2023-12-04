@@ -126,8 +126,7 @@
   justify-content: flex-start;
   align-items: center;
   margin: 0 auto;
-  width: 400px;
-  height: 90px; /* Increased height to accommodate title bar and content */
+  width: 400px;/* Increased height to accommodate title bar and content */
   background-color: #ffffff;
   border: 2px solid #000;
   margin: 50px;
@@ -158,7 +157,6 @@
   display: flex; /* Use flexbox */
   justify-content: flex-start; /* Align horizontally at the center */
   align-items: center; /* Align vertically at the center */
-  padding: 10px;
   text-align: center; /* Align text at the center */
 }
 

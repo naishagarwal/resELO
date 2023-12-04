@@ -1,38 +1,67 @@
-import React, {useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import SearchBar from './SearchBar';
 import club_styles from './club_page_style.module.css';
 import {useParams} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 
-function Stats({stats_array}) {
 
-  const confidence_score = stats_array[0];
-  const resumes_graded = stats_array[1]
+function Stats({num_resumes, num_games, avg_games}) {
+
+  const my_num_resumes = num_resumes;
+  const my_num_games = num_games;
+  const my_avg_games = avg_games;
 
   return (
     <>
       <div className={club_styles.stats}> 
         <div className={club_styles.titleBar}> Stats </div>
-        <div className={club_styles.counterContent}>  Confidence Score: {confidence_score}% <br />
-        Resumes Graded: {resumes_graded} {'\n'}
+        <div className={club_styles.counterContent}> <br /> Confidence Score: n/a% <br />
+        Number of Resumes: {my_num_resumes}<br />
+        Total Games: {my_num_games}<br />
+        Average Games per Resume: {my_avg_games}<br />
+        <br />
         </div>
       </div>
     </>
   )
 }
 
-
-
-
-
-
 export default function Page() {
   const resume_list = get_resumes();
   const [search_results, set_search_results] = useState(resume_list);
   const {clubName} = useParams()
+  const [club_exists, set_club_exists] = useState("Loading...");
   const navigate = useNavigate() // replace with function to return list of resume objects
   const resumes_total = resume_list.length;
   const stats_array = get_stats_array(); // replace with function to return number of graded resumes
+
+  const [clubData, setClubData] = useState(null);
+
+useEffect(() => {
+    fetch('http://localhost:4000/club_info/' + clubName, {
+      mode: 'cors',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+      method: 'get',
+    }).then((response) => { return response.json()})
+    .then((data) => {
+      console.log(data);
+      if(data.exists) {
+        set_club_exists("Exists");
+        setClubData(data); // Update clubData with the received data
+      } else {
+        set_club_exists("Does not exist");
+        console.log("Club does not exist")
+      }
+        // Additional processing or state setting with the data here
+    }).catch((error) => {
+        setValid("server down");
+        console.log(error);
+    });
+}, []);
+
 
   const handleSearch = (searchTerm) => {
     const filteredResults = resume_list.filter(item => item.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -52,22 +81,29 @@ export default function Page() {
   }  
 
   document.body.style.backgroundColor = "#3f4f37cc";
-  
-  return (
-    <div>
-      <button className={club_styles.backButton} onClick={back}> Back to Dashboard </button>
-      <h1> {clubName} Page </h1>
-      <div className={club_styles.contentContainer}>
-        <div className={club_styles.content1}>
-          <Resumes resumes={search_results} handleSearch={handleSearch} ></Resumes>
-        </div>
-        <div className={club_styles.content2}>
-          <Stats stats_array={stats_array}></Stats>
-          <div className={club_styles.compareButton} onClick={compare}> Compare </div>
+  if(club_exists == "Loading...") {
+    return (<div>Loading</div>)
+  } else if(club_exists == "Exists") {
+    return (
+      <div>
+        <button className={club_styles.backButton} onClick={back}> Back to Dashboard </button>
+        <h1> {clubName} Page </h1>
+        <div className={club_styles.contentContainer}>
+          <div className={club_styles.content1}>
+            <Resumes resumes={search_results} handleSearch={handleSearch} ></Resumes>
+          </div>
+          <div className={club_styles.content2}>
+            {clubData ? <Stats num_resumes={clubData.num_resumes} num_games={clubData.num_games} avg_games={clubData.avg_games}></Stats> : <div>test</div>}
+            <div className={club_styles.compareButton} onClick={compare}> Compare </div>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+      return (
+        <div>Club {clubName} does not exist</div>
+      )
+  }
 }
 
 function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link that can prese nt the pdf or just a name
