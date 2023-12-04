@@ -1,12 +1,6 @@
 node_modules
 .DS_Store
 uploads
-<<<<<<< HEAD
-Server/service_account.json
-Server/database/sqlite.db
-Server/clubs
-=======
 Server/sqlite.db
 Server/clubs
 Server/service_account.json
->>>>>>> df0e4e5d3edb7c050f550213462425efaedc62ff
