@@ -40,7 +40,6 @@ function User_Dashboard() {
       </div>
       <div className="output">
          {components.map((club, i) => (
-          //TODO: Make the button each have its own Club Page
             <div key={i}>
               <Link to={`/club/${club.service}`}>
                 <AddClub text={club.service}></AddClub>

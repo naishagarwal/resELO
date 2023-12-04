@@ -1,0 +1,78 @@
+.App {
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+  } 
+  
+  /*---------*/
+  
+  .account_button {
+  
+    font-size: 20px;
+    text-align: center;
+    background-color: #ECE7E2;
+    color: #2A3923;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .info_text {
+    text-align: center;
+    font-size: 25px;
+    color: #ECE7E2;
+    background-color: #2A3923;
+    padding: 40px;
+    margin: 40px;
+    margin-bottom: 20px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+  }
+
+  .heading {
+    text-align: center;
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 45px;
+    color: #ECE7E2;
+    padding-top: 20px;
+  }
+
+  .input_field {
+    padding: 5px;
+
+  }
+  .Component {
+  
+    color: white;
+    font-size: 10px;
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    background-color: #3F4F37;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+  
+  }
+  
+  .title{
+    text-align: center;
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 45px;
+    color: #3F4F37;
+    padding-top: 10px;
+  }
+  
+  h1{
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 35px;
+    color: #FCF9F5;
+  }
+  
+  
