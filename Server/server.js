@@ -19,18 +19,6 @@ const {get_multer_object} = require('./upload_pdf.js');
 const upload_pdf = get_multer_object(resume_db)
 resume_db.populate_database("test");
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAcETIzadQCkbSPt03nxn6kktFSUqfTAiY",
-//   authDomain: "reselo.firebaseapp.com",
-//   projectId: "reselo",
-//   storageBucket: "reselo.appspot.com",
-//   messagingSenderId: "488113282061",
-//   appId: "1:488113282061:web:2d7f81c6f11db926b74944",
-//   measurementId: "G-LRVXF61D22"
-// };
-
 const serviceAccount = require('./service_account.json')
 
 admin.initializeApp({ //initializing database
@@ -95,6 +83,7 @@ app.post('/signup', express.json(), (req, res) => {
   .then((userRecord) => {
       console.log("User Record:", userRecord);
       const userId = userRecord.uid;
+      user_db.add_user(userId, email) //adding user to the current user database
       const userRef = admin.database().ref('users/' + userId);
 
       userRef.set({
@@ -102,6 +91,7 @@ app.post('/signup', express.json(), (req, res) => {
         UID: userId
       })
       .then(() => {
+          //get auth token here and return
           return res.status(201).send({uid: userRecord.uid});
       })
   .catch ((error) => {
@@ -115,26 +105,6 @@ app.post('/signup', express.json(), (req, res) => {
 });
 
 });
-
-// app.post('/signup', express.json(), (req, res) => {
-//   //storing username and password
-//   const {email, password} = req.body; //getting username from request
-
-//   firebase.auth.createUserWithEmailAndPassword(email, password)
-//     .then((userCredential) => {
-//         const user = userCredential.user;
-//         const userID = user.uid
-
-//         user_db.add_user(userID, email)
-//         res.send("user signed up successsfully")
-//     })
-
-//     .catch(e => {
-//       //error handling
-//       res.json({message: e.message});
-//     });
-
-// });
 
 
 // app.get('/login', express.json(), (req, res) => {
