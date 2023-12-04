@@ -44,7 +44,7 @@ const App = () => {
          <Route path = "/club/:clubName" element = {<Club_Page />} />
          <Route path="/dashboard" element={<User_Dashboard />} />
          <Route path="/sign-up" element={<Sign_Up />} />
-         <Route path="/log-in" element={<Log_In />} />
+         <Route path="/login" element={<Log_In />} />
       </Routes>
       </BrowserRouter>
  );

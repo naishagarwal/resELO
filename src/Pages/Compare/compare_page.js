@@ -34,7 +34,6 @@ async function get_and_set_pdf_links(club_name, setPdf_1_link, setPdf_2_link) {
 }
 
 function winClick(win, lose, club_name, setPdf_1_link, setPdf_2_link) {
-    console.log((win.split('/')[win.split('/').length-1]).split('?')[0]);
     try {
         fetch('http://localhost:4000/update_scores', {
             mode: 'cors',
@@ -49,7 +48,8 @@ function winClick(win, lose, club_name, setPdf_1_link, setPdf_2_link) {
                 loser: (lose.split('/')[lose.split('/').length-1]).split('?')[0],
             })
         }).then((response) => {
-            get_and_set_pdf_links(club_name, setPdf_1_link, setPdf_2_link)
+            console.log(response);
+            get_and_set_pdf_links(club_name, setPdf_1_link, setPdf_2_link);
         });
     } catch (error) {
         console.log(error);
@@ -60,13 +60,16 @@ function winClick(win, lose, club_name, setPdf_1_link, setPdf_2_link) {
 
 export default function Page({club_name}) {
     const navigate = useNavigate();
-    const [pdf_1_link, setPdf_1_link] = useState('http://localhost:4000/resumes/test/llama.pdf');
-    const [pdf_2_link, setPdf_2_link] = useState('http://localhost:4000/resumes/test/2.pdf');
+    const [pdf_1_link, setPdf_1_link] = useState("");
+    const [pdf_2_link, setPdf_2_link] = useState("");
 
     document.body.style.backgroundColor = '#3f4f37cc';
 
+    useEffect(() => {
+        get_and_set_pdf_links(club_name, setPdf_1_link, setPdf_2_link)
+    }, []);
+
     function back() {
-        //TODO: Go back to the club page
         navigate('/club-page');
     }
 

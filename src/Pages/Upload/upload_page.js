@@ -24,7 +24,7 @@ const Upload = () => {
             setValid("server down")
             console.log(error);
         });
-    });
+    }, []);
 
     if(valid == "Loading...") {
         return (
