@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import club_styles from './club_page_style.module.css';
 import {useParams} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
-
+import Log_Out from '../Sign_Up_Page/log_out.js';
 
 function Stats({num_resumes, num_games, avg_games}) {
 
@@ -117,6 +117,7 @@ useEffect(() => {
   } else if(club_exists == "Exists") {
     return (
       <div>
+        <Log_Out style_sheet='sign_up_styles'> </Log_Out>
         <button className={club_styles.backButton} onClick={back}> Back to Dashboard </button>
         <h1> {clubName} Page </h1>
         <div className={club_styles.contentContainer}>
