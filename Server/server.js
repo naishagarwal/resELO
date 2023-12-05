@@ -207,10 +207,6 @@ app.post('/signup', express.json(), (req, res) => {
 });
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
 app.post('/update_scores', express.json(), (req, res) => {
   
   console.log(req.body.club_name, req.body.winner, req.body.loser);
