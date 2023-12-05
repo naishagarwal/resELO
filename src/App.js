@@ -39,7 +39,7 @@ const App = () => {
    <BrowserRouter>
       <Routes>
          {/* <Route path="/" element={<Home />} /> */}
-         <Route path="/compare"  element={<Compare club_name="test" />} />
+         <Route path="/compare/:clubName"  element={<Compare club_name="test" />} />
          <Route path="/Upload/*" element={<Upload />} />
          <Route path = "/club/:clubName" element = {<Club_Page />} />
          <Route path="/dashboard" element={<User_Dashboard />} />

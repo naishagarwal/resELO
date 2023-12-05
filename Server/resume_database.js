@@ -94,8 +94,14 @@ class Resume_Database {
 
     update_scores(club_name, winner, loser) {
         return new Promise((resolve, reject) => {
-            this.get_resume_elo(club_name, winner).then((winner_elo) => {
-                this.get_resume_elo(club_name, loser).then((loser_elo) => {
+            // this.get_resume_elo(club_name, winner).then((winner_elo) => {
+            //     this.get_resume_elo(club_name, loser).then((loser_elo) => {
+            this.db.all("SELECT elo FROM resume_info WHERE club_name = ? AND pdf_name = ?", [club_name, winner], (err, rows) => {
+                if (err) return console.error(err.message);
+                let winner_elo = rows[0].elo;
+                this.db.all("SELECT elo FROM resume_info WHERE club_name = ? AND pdf_name = ?", [club_name, loser], (err, rows) => {
+                    if (err) return console.error(err.message);
+                    let loser_elo = rows[0].elo;
                     if (winner_elo == -1 || loser_elo == -1) {
                         resolve(null);
                     }
