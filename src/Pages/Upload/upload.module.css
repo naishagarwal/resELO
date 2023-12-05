@@ -1,0 +1,53 @@
+.App {
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+  } 
+  
+  /*---------*/
+  
+  .file_upload {
+  
+    font-size: 13px;
+    box-shadow: #422800 4px 4px 0 0;
+    text-align: center;
+    background-color: #ECE7E2;
+    color: #2A3923;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .heading {
+    text-align: center;
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 45px;
+    color: #2A3923;
+    padding-top: 20px;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px;
+    margin-left: 150px;
+    margin-right: 150px;
+  }
+
+.input_field {
+  padding: 10px;
+  font-size: 20px;
+  margin: 5px;
+  border-radius: 4px;
+  display: flex;
+  color: #2A3923;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}

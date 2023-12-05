@@ -3,9 +3,6 @@ import dash_styles from './dashboard.module.css';
 import {Link, redirect} from 'react-router-dom'
 import { useState, useEffect } from 'react';
 
-
-
-
 function ClubObject(props) {
   const [isCopied, setIsCopied] = useState(false);
 
@@ -20,12 +17,14 @@ function ClubObject(props) {
 
   console.log(props);
   return ( 
-    <div className={dash_styles.Component} > 
-      <div>
-        <Link to={`/club/${props.club_name}`}>
-          {props.club_name}
+    <div> 
+      <div className={dash_styles.center}>
+        <div className={dash_styles.Component}>
+        <Link to={`/club/${props.club_name}`} className={dash_styles.Club_Comp}>
+        {props.club_name}
         </Link>
-        <button onClick={() => copyClubLink(props.club_name)}>{isCopied ? 'Copied!' : 'Copy Club Link'}</button>
+        </div>
+        <button className={dash_styles.LinkButton} onClick={() => copyClubLink(props.club_name)}>{isCopied ? 'Copied!' : 'Copy Club Link'}</button>
       </div>
     </div> 
   ); 

@@ -6,7 +6,7 @@ class Resume_Database {
     constructor(database) {
         this.db = database;
         this.db.run('CREATE TABLE IF NOT EXISTS clubs (club_name TEXT PRIMARY KEY)');
-        this.db.run('CREATE TABLE IF NOT EXISTS resume_info (id INTEGER PRIMARY KEY AUTOINCREMENT, club_name TEXT, pdf_name TEXT, elo INTEGER, games_played INTEGER)');
+        this.db.run('CREATE TABLE IF NOT EXISTS resume_info (pdf_name TEXT PRIMARY KEY, author_name TEXT, author_email TEXT, club_name TEXT, elo INTEGER, games_played INTEGER)');
     }
     
     create_club(club_name) {
@@ -24,31 +24,45 @@ class Resume_Database {
     }
     
     //populate database if does not already exist
-    populate_database(club_name) {
-        fs.readdir(__dirname + '/database/clubs/' + club_name, (err, files) => {
-            let array = files.filter(function (str) { return str.match(/\.pdf$/); });
-            // console.log(array);
-            array.forEach(pdf_name => {
-                //check if pdf alreayd in database
-                let sql = `SELECT * FROM resume_info WHERE club_name = ? AND pdf_name = ?`;
-                this.db.get(sql, [club_name, pdf_name], (err, row) => {
-                    if (err) return console.error(err.message);
-                    console.log(row);
-                    if (!row) {
-                        let sql = `INSERT INTO resume_info(club_name, pdf_name, elo, games_played) VALUES(?, ?, ?, ?)`;
-                        this.db.run(sql, [club_name, pdf_name, 1000, 0], function (err) {
-                            if (err) return console.error(err.message);
+    populate_database() {
+        new Promise((resolve, reject) => {
+            fs.readdir(__dirname + '/database/clubs/', {withFileTypes: true}, (err, clubs) => {
+                if (err) reject(err);
+                clubs.filter(club => club.isDirectory())
+                .forEach(club => {
+                    // this.db.all("SELECT * FROM clubs WHERE club_name = ?", [club.name], (err, rows) => {
+                    //     if (err) reject(err);
+                    //     if (!rows) {
+                    //         this.db.run("INSERT INTO clubs(club_name) VALUES(?)", [club], function (err) {
+                    //             if (err) return console.error(err.message);
+                    //         })
+                    //     }
+                    // });
+                    fs.readdir(club.path+club.name, (err, files) => {
+                        if (err) reject(err);
+                        files.filter(file => file.match(/\.pdf$/)).forEach(pdf_name => {
+                            let sql = `SELECT * FROM resume_info WHERE club_name = ? AND pdf_name = ?`;
+                            this.db.get(sql, [club, pdf_name], (err, row) => {
+                                if (err) return console.error(err.message);
+                                if (!row) {
+                                    let sql = `INSERT INTO resume_info(club_name, pdf_name, elo, games_played) VALUES(?, ?, ?, ?)`;
+                                    this.db.run(sql, [club, pdf_name, 1000, 0], function (err) {
+                                        if (err) return console.error(err.message);
+                                        console.log("File " + pdf_name + " in club " + club.name + " was not in database and was therefore added");
+                                    });
+                                }
+                            });
                         });
-                    }
+                    });
                 });
             });
         });
     }
         
-    add_resume(club_name, pdf_name) {
+    add_resume(club_name, pdf_name, author_name, author_email) {
         return new Promise((resolve, reject) => {
-            let sql = `INSERT INTO resume_info(club_name, pdf_name, elo, games_played) VALUES(?, ?, ?, ?)`;
-            this.db.run(sql, [club_name, pdf_name, 1000, 0], function (err) {
+            let sql = `INSERT INTO resume_info(club_name, pdf_name, author_name, author_email, elo, games_played) VALUES(?, ?, ?, ?, ?, ?)`;
+            this.db.run(sql, [club_name, pdf_name, author_name, author_email, 1000, 0], function (err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -121,37 +135,54 @@ class Resume_Database {
         return new Promise((resolve, reject) => {
             //get number of resumes and stats about them from database
             // if club does not exist return {exitst: false}
-            let sql = `SELECT * FROM resume_info WHERE club_name = ?`;
-            this.db.all(sql, [club_name], (err, rows) => {
-                if (err) {
-                    reject({exists : false, message: err.message})
-                }
-                
-                if (rows.length == 0) {
-                    this.db.all("SELECT * FROM clubs WHERE club_name = ?", [club_name], (err, rows) => {
-                        if (err) reject({exists : false});
-                        if (rows.length == 0) {
-                            resolve({ exists: false });
-                        } else {
-                            // making sure club directory exists for file uploads (if club exists in database)
-                            // fs.mkdir(__dirname + '/database/clubs/' + club_name, (err) => {
-                            //     if (err) console.log(err);
-                            // });
+            this.get_all_rows("clubs", (rows) => {
+                console.log(rows);
+            });
+            console.log("CLub name: " + club_name);
 
-                            resolve({ exists: true, num_resumes: 0, num_games: 0, avg_games: 0 });
+            this.db.all("SELECT * FROM clubs WHERE club_name = ?", [club_name], (err, rows) => {
+                if (err) reject(err);
+                console.log(rows);
+                if(rows.length == 0) {
+                    resolve({ exists: false });
+                } else {
+                    this.db.all("SELECT * FROM resume_info WHERE club_name = ?", [club_name], (err, rows) => {
+                        if (err) reject(err);
+                        if (rows.length == 0) {
+                            resolve({ exists: true });
+                        } else {
+                            let num_resumes = rows.length;
+                            let num_games = 0;
+                            rows.forEach((row) => {
+                                num_games += row.games_played;
+                            });
+                            let avg_games = num_games / num_resumes;
+                            resolve({ exists: true, 
+                                num_resumes: num_resumes, 
+                                num_games: num_games, 
+                                avg_games: avg_games });
                         }
                     });
+                }
+            });
+        });
+    }
+
+    get_resumes(club_name) {
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT * FROM resume_info WHERE club_name = ?`;
+            this.db.all(sql, [club_name], (err, rows) => {
+                if (err) return console.error(err.message);
+                if (rows.length == 0) {
+                    resolve({});
                 } else {
-                    let num_resumes = rows.length;
-                    let num_games = 0;
-                    rows.forEach((row) => {
-                        num_games += row.games_played;
-                    });
-                    let avg_games = num_games / num_resumes;
-                    resolve({ exists: true, 
-                        num_resumes: num_resumes, 
-                        num_games: num_games, 
-                        avg_games: avg_games });
+                    console.log(rows)
+                    resolve(rows.map(row => {return {
+                        author_name: row.author_name, 
+                        author_email: row.author_email,
+                        elo: row.elo,
+                        games_played: row.games_played
+                    }}));
                 }
             });
         });
