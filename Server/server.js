@@ -17,7 +17,8 @@ let resume_db = new Resume_Database(db);
 let user_db = new User_Database(db);
 const {get_multer_object} = require('./upload_pdf.js');
 const upload_pdf = get_multer_object(resume_db)
-resume_db.populate_database("test");
+resume_db.populate_database();
+resume_db.get_resumes("test")
 
 const serviceAccount = require('./service_account.json')
 
@@ -45,6 +46,20 @@ app.use(function (req, res, next) {
 
 
 app.use('/resumes', express.static(path.join(__dirname, 'database/clubs')));
+
+
+
+app.get('/get_resumes/*', (req, res) => {
+  let club_name = req.originalUrl.split('/')[2];
+  resume_db.get_resumes(club_name).then((resumes) => {
+    console.log(resumes);
+    res.status(200).json({ resumes: resumes });
+  }).catch((err) => {
+    console.log(err);
+    res.status(400).json({ message: err });
+  });
+});
+
 
 app.post('/add_club', express.json(), (req, res) => {
   let club_name = req.body.club_name;
@@ -125,6 +140,7 @@ app.get('/get_next_resumes/*', (req, res) => {
 
 app.get("/club_info/*", express.json(), (req, res) => {
   let club_name = req.originalUrl.split('/')[2];
+  console.log("TJIEGIJE"+req.originalUrl+"WWWWWWW");
   resume_db.get_club_info(club_name).then((result) => {
     res.status(200).json(result);
   }).catch((err) => {
@@ -178,23 +194,6 @@ app.post('/signup', express.json(), (req, res) => {
 });
 
 
-// app.get('/login', express.json(), (req, res) => {
-//   //storing username and password
-//   const {username, password} = req.body; //getting username from request
-
-//   firebase.auth().signInWithEmailAndPassword(email, password)
-//       .then((userCredential) => {
-//         const user = userCredential.user;
-//         const userId = user.uid; //user's unique id 
-//       }
-//   )
-
-
-// }
-
-// )
-
-
 app.post('/update_scores', express.json(), (req, res) => {
   
   console.log(req.body.club_name, req.body.winner, req.body.loser);
@@ -204,13 +203,11 @@ app.post('/update_scores', express.json(), (req, res) => {
   }
   console.log(decodeURI(req.body.club_name), decodeURI(req.body.winner), decodeURI(req.body.loser));
   resume_db.update_scores(decodeURI(req.body.club_name), decodeURI(req.body.winner), decodeURI(req.body.loser)).then((result) => {
-    resume_db.get_all_rows("resume_info", (rows) => {
-      rows.forEach((row) => {
-          console.log(row);
-      });
-    });
-  })
-  res.json({ message: 'Scores updated successfully!' });
+    res.json({ message: 'Scores updated successfully!' });
+  }).catch((err) => {
+    console.log(err);
+    res.status(400).json({ message: err });
+  });
 })
 
 

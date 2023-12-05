@@ -27,44 +27,65 @@ function Stats({num_resumes, num_games, avg_games}) {
 }
 
 export default function Page() {
-  const resume_list = get_resumes();
+  const {clubName} = useParams();
+  const [resume_list, set_resume_list] = useState([]);
   const [search_results, set_search_results] = useState(resume_list);
-  const {clubName} = useParams()
+  
   const [club_exists, set_club_exists] = useState("Loading...");
-  const navigate = useNavigate() // replace with function to return list of resume objects
-  const resumes_total = resume_list.length;
-  const stats_array = get_stats_array(); // replace with function to return number of graded resumes
-
+  const navigate = useNavigate(); // replace with function to return list of resume objects
   const [clubData, setClubData] = useState(null);
 
 useEffect(() => {
-    fetch('http://localhost:4000/club_info/' + clubName, {
-      mode: 'cors',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-      },
-      method: 'get',
-    }).then((response) => { return response.json()})
-    .then((data) => {
-      console.log(data);
-      if(data.exists) {
-        set_club_exists("Exists");
-        setClubData(data); // Update clubData with the received data
-      } else {
-        set_club_exists("Does not exist");
-        console.log("Club does not exist")
-      }
-        // Additional processing or state setting with the data here
-    }).catch((error) => {
-        setValid("server down");
-        console.log(error);
-    });
-}, []);
+  console.log("LOOOK"+clubName);
+  if (clubName == null) {
+    return;
+  }
+  console.log("clubName: " + clubName);
+  fetch('http://localhost:4000/club_info/' + clubName, {
+    mode: 'cors',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    },
+    method: 'get',
+  }).then((response) => { return response.json()})
+  .then((data) => {
+    console.log(data);
+    if(data.exists) {
+      set_club_exists("Exists");
+      setClubData(data); // Update clubData with the received data
+    } else {
+      set_club_exists("Does not exist");
+      console.log("Club does not exist");
+    }
+      // Additional processing or state setting with the data here
+  }).catch((error) => {
+      setValid("server down");
+      console.log(error);
+  });
+
+  fetch('http://localhost:4000/get_resumes/'+ clubName, {
+    mode: 'cors',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    },
+    method: 'get',
+  }).then((response) => { return response.json()})
+  .then((data) => {
+    console.log(data.resumes);
+    set_resume_list(data.resumes);
+    set_search_results(data.resumes);
+  }).catch((error) => {
+      alert(error);
+      return [];
+  });
+
+}, [clubName]);
 
 
   const handleSearch = (searchTerm) => {
-    const filteredResults = resume_list.filter(item => item.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredResults = resume_list.filter(item => item.author_name.toLowerCase().includes(searchTerm.toLowerCase()));
     set_search_results(filteredResults);
   };
   
@@ -109,10 +130,10 @@ useEffect(() => {
 function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link that can prese nt the pdf or just a name
   const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
      <div className={club_styles.resumeContainer} key={index}>
-      <div>Rank</div>
-      <div>ELO</div>
-      <div> Name </div>
-      <div>{resume}</div>
+      <div>{resume.author_name}</div>
+      <div> {resume.elo}</div>
+      <div>{resume.games_played}</div>
+      <div>{resumes.author_email}</div>
      </div>
      )
    );
@@ -131,20 +152,6 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
    {resumeItems}
   </div>)
  }
-
-
-
-function get_resumes() {
-  //TODO: return a list of resume names or links
-
-  //filler
-  let resumes = [];
-  for (let i = 0; i < 100; i++){
-    let b = String(i)
-    resumes.push(b);
-  };
-  return resumes;
-}
 
 function get_stats_array() {
   // TODO: implement way to get number of resumes graded 

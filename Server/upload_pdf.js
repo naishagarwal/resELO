@@ -22,8 +22,7 @@ function get_multer_object(resume_database) {
     },
     filename: (req, file, cb) => {
       file_name = Date.now() + '-' + file.originalname;
-      console.log(file_name);
-      resume_database.add_resume(req.originalUrl.split('/')[2], file_name).then(() => {
+      resume_database.add_resume(req.originalUrl.split('/')[2], file_name, req.body.author_name, req.body.author_email).then(() => {
         cb(null, file_name);
       });
     },
