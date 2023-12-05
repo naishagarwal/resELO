@@ -108,7 +108,7 @@ useEffect(() => {
 
   function compare(){
     //TODO: go to resume comparison page
-    navigate('/compare')
+    navigate('/compare/'+clubName)
   }  
 
   document.body.style.backgroundColor = "#3f4f37cc";
