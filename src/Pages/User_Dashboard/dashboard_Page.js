@@ -1,7 +1,6 @@
 import dash_styles from './dashboard.module.css';
 import { useState, useEffect } from 'react'; 
-import { AddClub } from './add_club.js'; 
-import {Link, redirect} from 'react-router-dom'
+import { ClubObject } from './ClubObject.js'; 
 import {useNavigate} from 'react-router-dom'
 import { getAuth } from "firebase/auth";
 
@@ -33,9 +32,7 @@ function User_Dashboard() {
         }).then((response) => { return response.json(); })
         .then((response) => {
           console.log(response);
-          setComponents(response.clubs.map((name) => {
-            { return {club_name: name} }
-          }));
+          setComponents(response.clubs);
         }).catch((error) => {
           console.log(error);
         });
@@ -66,9 +63,7 @@ function User_Dashboard() {
           alert('Club already exists');
         } else {
           setInputValue('');
-          setComponents(response.clubs.map((name) => {
-            { return {club_name: name} }
-          }));
+          setComponents(response.clubs);
         }
       }).catch((error) => {
         console.log(error);
@@ -107,11 +102,9 @@ function User_Dashboard() {
           </div>
       </div>
       <div className="output">
-         {components.map((club, i) => (
+         {components.map((club_name, i) => (
             <div key={i}>
-              <Link to={`/club/${club.club_name}`}>
-                <AddClub text={club.club_name}></AddClub>
-              </Link>
+              <ClubObject club_name={club_name} ></ClubObject>
             </div>
           ))}
       </div>

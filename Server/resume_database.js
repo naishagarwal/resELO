@@ -14,6 +14,10 @@ class Resume_Database {
             let sql = `INSERT INTO clubs(club_name) VALUES(?)`;
             this.db.run(sql, [club_name], function (err) {
                 if (err) reject("Club " + club_name +" already exists");
+                //make club directory if does not exist already
+                fs.mkdir(__dirname + '/database/clubs/' + club_name, (err) => {
+                    if (err) console.log(err);
+                });
                 resolve();
             });
         });
@@ -122,8 +126,21 @@ class Resume_Database {
                 if (err) {
                     reject({exists : false, message: err.message})
                 }
+                
                 if (rows.length == 0) {
-                    resolve({ exists: false });
+                    this.db.all("SELECT * FROM clubs WHERE club_name = ?", [club_name], (err, rows) => {
+                        if (err) reject({exists : false});
+                        if (rows.length == 0) {
+                            resolve({ exists: false });
+                        } else {
+                            // making sure club directory exists for file uploads (if club exists in database)
+                            // fs.mkdir(__dirname + '/database/clubs/' + club_name, (err) => {
+                            //     if (err) console.log(err);
+                            // });
+
+                            resolve({ exists: true, num_resumes: 0, num_games: 0, avg_games: 0 });
+                        }
+                    });
                 } else {
                     let num_resumes = rows.length;
                     let num_games = 0;

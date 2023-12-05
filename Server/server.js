@@ -57,11 +57,11 @@ app.post('/add_club', express.json(), (req, res) => {
   .then((decodedToken) => {
     return decodedToken.uid;
   }).then((UID) => {
-    resume_db.create_club(club_name).then(() => {
-      console.log("Club "+club_name+" added to resume database");
-      user_db.add_club(UID, club_name).then(() => {
-        console.log("Club added to user database");
-
+    resume_db.create_club(club_name).then((msg) => {
+      console.log(msg);
+      user_db.add_club(UID, club_name).then((msg) => {
+        console.log(msg);
+        
         user_db.get_clubs(UID).then((clubs) => {
           console.log(clubs);
           res.status(201).json({ message: 'Club added successfully!', clubs: clubs });
