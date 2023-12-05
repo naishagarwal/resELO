@@ -69,12 +69,12 @@ function User_Dashboard() {
         },
         method: 'post',
         body: JSON.stringify({
-          club_name: inputValue,
+          club_name: inputValue.toUpperCase(),
         })
       }).then((response) => { return response.json(); })
       .then((response) => {
         console.log(response);
-        if(response.message == 'Club ' + inputValue + ' already exists') {
+        if(response.message == 'Club ' + inputValue.toUpperCase() + ' already exists') {
           alert('Club already exists');
         } else {
           setInputValue('');
@@ -86,22 +86,11 @@ function User_Dashboard() {
     });
   };
 
-  function logout() {
-    auth.signOut()
-      .then(() => {
-        // Redirect to home page
-        navigate("/");
-      })
-      .catch((error) => {
-        alert('Error logging out:', error);
-      });
-    }
-
   return (
     <span>
       <div className={dash_styles.buttonDisplay}>
       <Log_Out style_sheet='dash_styles' ></Log_Out>
-      <h1 className={dash_styles.title}>USER'S DASHBOARD</h1>
+      <h1 className={dash_styles.title}>CLUB DASHBOARD</h1>
           <div className={dash_styles.input}>
             <div>
               <input className={dash_styles.input_field}

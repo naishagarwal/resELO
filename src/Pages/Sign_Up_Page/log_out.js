@@ -1,4 +1,3 @@
-import dash_styles from '../User_Dashboard/dashboard.module.css';
 import sign_up_styles from './sign_up_style.module.css';
 import { useState, useEffect } from 'react'; 
 import {useNavigate} from 'react-router-dom'
@@ -30,21 +29,21 @@ const Log_Out = (props) => {
       });
     }
   
-    if (props.style_sheet === "dash_styles") //This one is tan color
+    if (props.style_sheet == 'sign_up_styles') //This one is tan color
     {
         return (
-            <div>
-                <text className={sign_up_styles.dash_email_display} > User: {email} </text>
-                <button className={dash_styles.LogOutButton}
+            <div className={sign_up_styles.log_out_buttons}>
+                <text className={sign_up_styles.dash_email_display} style={{color: '#FCF9F5'}}>{email}</text> 
+                <button className={sign_up_styles.LogOutButton} style={{color: '#FCF9F5'}}
                         onClick={logout}>Log Out</button>
             </div>
         );
     }
     else{
         return (
-            <div>
-                <text className={sign_up_styles.emailDisplay} > User: {email} </text>
-                <button className={sign_up_styles.LogOutButton}
+            <div className={sign_up_styles.log_out_buttons}>
+                <text className={sign_up_styles.dash_email_display}>{email}</text>
+                <button className={sign_up_styles.LogOutButton }
                         onClick={logout}>Log Out</button>
             </div>
         );
