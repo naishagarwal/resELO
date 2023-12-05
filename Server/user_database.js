@@ -21,6 +21,54 @@ class User_Database {
     }   );
     }
 
+    populate_users(usersData) {
+        //goes through users list and checks if it is in the user database; if it isn't, then
+        //add it to local database.
+        return new Promise ((resolve, reject) => {
+            const promises = [];
+
+            //iterate through usersData object
+            for (const userId in usersData) {
+                if(usersData.hasOwnProperty(userId)) {
+                    const userData = usersData[userId];
+
+                    //checking if user already exists in local database
+                    const sql = `SELECT * FROM users where UID = ?`;
+                    this.db.get(sql, [userId], (err, row) => {
+                        if(err){
+                            reject(err)
+                        } else if (!row) {
+                            // if user does not exist in local database
+                            const addUserPromise = new Promise((resolveAdd, rejectAdd) => {
+                                const addUserSQL = `INSERT INTO users(UID, email) VALUES(?, ?)`;
+                                this.db.run(addUserSQL, [userId, userData.email], function (err) {
+                                    if(err){
+                                        rejectAdd(err);
+                                    }else{
+                                        resolveAdd();
+                                    }
+                                });
+                            });
+
+                            promises.push(addUserPromise);
+                        }
+                    });
+                }
+            }
+
+            Promise.all(promises)
+                .then(() => {
+                    console.log("users populated in local database");
+                    resolve();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    reject(err);
+                });
+
+        });
+    }
+
     get_all_users() {
         return new Promise((resolve, reject) => {
             this.db.all("SELECT * FROM users", [], (err, rows) => {
