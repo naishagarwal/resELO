@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import SearchBar from './SearchBar';
 import club_styles from './club_page_style.module.css';
-import {useParams} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
+import {useParams} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
+import { getAuth } from "firebase/auth";
 
 
 function Stats({num_resumes, num_games, avg_games}) {
@@ -37,60 +38,65 @@ export default function Page() {
   let isNonListObject = false;
 
 useEffect(() => {
-  console.log("LOOOK"+clubName);
   if (clubName == null) {
     return;
   }
-  console.log("clubName: " + clubName);
-  fetch('http://localhost:4000/club_info/' + clubName, {
-    mode: 'cors',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
-    method: 'get',
-  }).then((response) => { return response.json()})
-  .then((data) => {
-    console.log(data);
-    if(data.exists) {
-      set_club_exists("Exists");
-      setClubData(data); // Update clubData with the received data
-    } else {
-      set_club_exists("Does not exist");
-      console.log("Club does not exist");
-    }
-      // Additional processing or state setting with the data here
-  }).catch((error) => {
-      setValid("server down");
-      console.log(error);
-  });
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (user) { 
+    auth.currentUser.getIdToken().then((idToken) => {
+      fetch('http://localhost:4000/club_info/' + clubName, {
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': idToken,
+        },
+        method: 'get',
+      }).then((response) => { return response.json()})
+      .then((data) => {
+        console.log(data);
+        if(data.exists) {
+          set_club_exists("Exists");
+          setClubData(data); // Update clubData with the received data
+        } else {
+          set_club_exists("Does not exist");
+          console.log("Club does not exist");
+        }
+          // Additional processing or state setting with the data here
+      }).catch((error) => {
+          setValid("server down");
+          console.log(error);
+      });
 
-  fetch('http://localhost:4000/get_resumes/'+ clubName, {
-    mode: 'cors',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
-    method: 'get',
-  }).then((response) => { return response.json()})
-  .then((data) => {
-    console.log(data.resumes);
-
-    // Check if data.resumes is an array or list
-    if (Array.isArray(data.resumes)) {
-        set_resume_list(data.resumes);
-        set_search_results(data.resumes);
-    } else {
-        // Set flag to true if it's a non-list object
-        isNonListObject = true;
-    }
-    
-  }).catch((error) => {
-      alert(error);
-      return [];
-  });
-
-
+      fetch('http://localhost:4000/get_resumes/'+ clubName, {
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': idToken,
+        },
+        method: 'get',
+      }).then((response) => { return response.json()})
+      .then((data) => {
+        console.log(data.resumes);
+        // Check if data.resumes is an array or list
+        if (Array.isArray(data.resumes)) {
+          set_resume_list(data.resumes);
+          set_search_results(data.resumes);
+        } else {
+          // Set flag to true if it's a non-list object
+          isNonListObject = true;
+        }
+  
+      }).catch((error) => {
+          alert(error);
+          return [];
+      });
+    });
+  } else {
+    navigate('/login');
+  }
 }, [clubName]);
 
 
