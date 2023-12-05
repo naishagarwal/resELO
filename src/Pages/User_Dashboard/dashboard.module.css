@@ -9,16 +9,23 @@
   .AddButton {
   
     font-size: 15px;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: Trebuchet 'Trebuchet MS';
     text-align: center;
     background-color: #C1A88A;
     border-radius: 5px;
     padding: 5px;
   }
+
+  .emailDisplay {
+    font-size: 15px;
+    font-family: Trebuchet 'Trebuchet MS';
+    position: absolute;
+    right: 5%
+  }
   
   .LogOutButton{
     font-size: 15px;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: Trebuchet 'Trebuchet MS';
     text-align: center;
     position: absolute;
     right: 5%;
@@ -36,7 +43,7 @@
   
     color: white;
     font-size: 10px;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: Trebuchet 'Trebuchet MS';
     text-align: center;
     background-color: #3F4F37;
     border-radius: 10px;
@@ -50,14 +57,14 @@
   
   .title{
     text-align: center;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: Trebuchet 'Trebuchet MS';
     font-size: 45px;
     color: #3F4F37;
     padding-top: 10px;
   }
   
   h1{
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: Trebuchet 'Trebuchet MS';
     font-size: 35px;
     color: #FCF9F5;
   }

@@ -1,11 +1,10 @@
 import dash_styles from './dashboard.module.css';
 import { useState, useEffect } from 'react'; 
 import { ClubObject } from './ClubObject.js'; 
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getAuth } from "firebase/auth";
+import Log_Out from '../Sign_Up_Page/log_out.js';
 
-//TODO: One issue is the buttons disappear when I refresh the page
-//this is because it is not being stored in databse rn; need to save clubs in database 
 
 function User_Dashboard() { 
   const navigate = useNavigate();
@@ -85,8 +84,7 @@ function User_Dashboard() {
   return (
     <span>
       <div className={dash_styles.buttonDisplay}>
-      <button className={dash_styles.LogOutButton}
-                  onClick={logout}>Log Out</button>
+      <Log_Out style_sheet='dash_styles' ></Log_Out>
       <h1 className={dash_styles.title}>USER'S DASHBOARD</h1>
           <div className={dash_styles.input}>
             <div>
