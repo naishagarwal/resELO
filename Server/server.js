@@ -169,7 +169,18 @@ app.post('/signup', express.json(), (req, res) => {
       console.log("user added to local databse")
       const users = user_db.get_all_users();
       console.log("all users", users)
-      const userRef = admin.database().ref('users/' + userId);
+      const usersRef = admin.database().ref('users/');
+      //get all users from Firebase Realtime Database
+      usersRef.once('value', (snapshot) => {
+          const usersData = snapshot.val();
+          console.log(usersData)
+
+          //call user db populate users function
+          user_db.populate_users(usersData).then(() => {
+            console.log("users populated in local database")
+            const userRef = admin.database().ref('users/' + userId);
+          
+      
 
       userRef.set({
         email: email,
@@ -181,6 +192,8 @@ app.post('/signup', express.json(), (req, res) => {
         console.log(err);
         res.status(400).json({ message: err });
       });
+    });
+  });
 
     }).catch((err) => {
       console.log(err);
@@ -194,6 +207,10 @@ app.post('/signup', express.json(), (req, res) => {
 });
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/main
 app.post('/update_scores', express.json(), (req, res) => {
   
   console.log(req.body.club_name, req.body.winner, req.body.loser);

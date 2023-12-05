@@ -33,21 +33,45 @@
 
   }
   .Component {
-  
-    color: white;
-    font-size: 10px;
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    text-align: center;
     background-color: #3F4F37;
+    box-shadow: #422800 2px 2px 0 0;
     border-radius: 10px;
-    padding: 10px;
-    padding-bottom: 20px;
-    margin: 10px;
+    padding: 45px;
+    width: 800px;
+    margin: 20px;
+    margin-bottom: 10px;
     text-align: center;
+  }
 
-  
+  .Club_Comp {
+    color: white;
+    padding: 10px;
+    font-size: 30px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-decoration: inherit;
   }
   
+  .LinkButton {
+    color: black;
+    font-size: 15px;
+    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    background-color: #FCF9F5;
+    box-shadow: #422800 4px 4px 0 0;
+    border-radius: 10px;
+    padding: 10px;
+    text-decoration: none; 
+    text-align: center;
+    margin-right: auto; 
+    margin-left: 10px;
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+
+  }
+
   .title{
     text-align: center;
     font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
