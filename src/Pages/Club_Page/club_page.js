@@ -133,7 +133,7 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
       <div>{resume.author_name}</div>
       <div> {resume.elo}</div>
       <div>{resume.games_played}</div>
-      <div>{resumes.author_email}</div>
+      <div>{resume.author_email}</div>
      </div>
      )
    );
