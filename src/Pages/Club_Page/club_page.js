@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import SearchBar from './SearchBar';
 import club_styles from './club_page_style.module.css';
-import {useParams} from 'react-router-dom'
-import {useNavigate} from 'react-router-dom'
+import {useParams} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 
 function Stats({num_resumes, num_games, avg_games}) {
 
   const my_num_resumes = num_resumes;
   const my_num_games = num_games;
-  const my_avg_games = avg_games;
+  const my_avg_games = num_games/num_resumes;
 
   return (
     <>
@@ -144,13 +144,14 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
   { 
     emp_resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
       <div className={club_styles.resumeContainer} key={index}>
-        <div>{resume.author_name}</div>
-        <div> {resume.elo}</div>
+        <div>{Math.round(resume.elo)}</div>
+        <div> {resume.author_name}</div>
         <div>{resume.games_played}</div>
         <div>{resume.author_email}</div>
       </div>
       )
     );
+    emp_resumeItems.sort((a,b) => b.elo - a.elo)
   }
   const resumeItems = emp_resumeItems
   return (<div className={club_styles.scrollContainer}>
@@ -159,10 +160,10 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
              <SearchBar handleSearch={handleSearch} />
    </div>
    <div className={club_styles.scrollTitleCategories}>
-    <div>Rank:</div>
     <div>ELO:</div>
     <div>Name:</div>
-    <div>Resume:</div>
+    <div>Games Played:</div>
+    <div>Email:</div>
    </div>
    {resumeItems}
   </div>)
