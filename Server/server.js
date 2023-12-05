@@ -37,6 +37,48 @@ const { getDatabase} = require('firebase-admin/database') //getDatabase automati
 const database = getDatabase() //initializing firebase database
 
 
+function checkUserClubAcess(req, res, next) {
+  let club_name = "";
+  if (req.method == "GET") {
+    club_name = req.originalUrl.split('/')[2];
+  } else if(req.method == "POST") {
+    club_name = req.body.club_name;
+  } else {
+    res.status(400).json({ message: 'Invalid request' });
+    return;
+  }
+  if (!req.headers.authorization) {
+    console.log("No credentials");
+    res.status(401).json({ message: 'Credentials needed' });
+    return;
+  }
+  admin.auth().verifyIdToken(req.headers.authorization).then((decodedToken) => {
+    user_db.check_user_acess_to_club(decodedToken.uid, club_name).then((result) => {
+      // console.log("DOES USER HAVE ACCESS TO THIS CLUB: " + result)
+      // console.log("CLUB NAME: " + club_name);
+      // console.log("USER ID: " + decodedToken.uid);
+      // user_db.get_clubs(decodedToken.uid).then((clubs) => {
+      //   console.log("USER HAS ACCESS TO THIS CLUB");
+      //   console.log(clubs);
+      // });
+      if (result) {
+        console.log("REQUEST PASSED CREDENTIALS CHECK")
+        next();
+      } else {
+        res.status(401).json({ message: 'Unauthorized' });
+      }
+    }).catch((err) => {
+      console.log("USER DOES NOT HAVE ACESS TO THIS CLUB");
+      res.status(400).json({ message: err });
+    });
+  }).catch((err) => {
+    console.log("NO USER EXISTS");
+    res.status(400).json({ message: err });
+  });
+}
+
+
+
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -125,7 +167,7 @@ app.get('/get_clubs', express.json(), (req, res) => {
 });
 
 
-app.get('/get_next_resumes/*', (req, res) => {
+app.get('/get_next_resumes/*', checkUserClubAcess, (req, res) => {
   let club_name = req.originalUrl.split('/')[2];
 
   resume_db.get_next_resumes(club_name).then((file_name) => {
@@ -138,7 +180,7 @@ app.get('/get_next_resumes/*', (req, res) => {
   });
 });
 
-app.get("/club_info/*", express.json(), (req, res) => {
+app.get("/club_info/*", express.json(), checkUserClubAcess, (req, res) => {
   let club_name = req.originalUrl.split('/')[2];
   console.log("TJIEGIJE"+req.originalUrl+"WWWWWWW");
   resume_db.get_club_info(club_name).then((result) => {
@@ -172,26 +214,24 @@ app.post('/signup', express.json(), (req, res) => {
       const usersRef = admin.database().ref('users/');
       //get all users from Firebase Realtime Database
       usersRef.once('value', (snapshot) => {
-          const usersData = snapshot.val();
-          console.log(usersData)
+        const usersData = snapshot.val();
+        console.log(usersData)
 
-          //call user db populate users function
-          user_db.populate_users(usersData).then(() => {
-            console.log("users populated in local database")
-            const userRef = admin.database().ref('users/' + userId);
-          
-      
-
-      userRef.set({
-        email: email,
-        UID: userId
-      }).then(() => {
-        console.log("user added to firebase database")
-        res.status(201).send({uid: userRecord.uid});
-      }).catch((err) => {
-        console.log(err);
-        res.status(400).json({ message: err });
-      });
+        //call user db populate users function
+        user_db.populate_users(usersData).then(() => {
+          console.log("users populated in local database")
+          const userRef = admin.database().ref('users/' + userId);
+            
+        userRef.set({
+          email: email,
+          UID: userId
+        }).then(() => {
+          console.log("user added to firebase database")
+          res.status(201).send({uid: userRecord.uid});
+        }).catch((err) => {
+          console.log(err);
+          res.status(400).json({ message: err });
+        });
     });
   });
 
@@ -207,7 +247,7 @@ app.post('/signup', express.json(), (req, res) => {
 });
 
 
-app.post('/update_scores', express.json(), (req, res) => {
+app.post('/update_scores', express.json(), checkUserClubAcess, (req, res) => {
   
   console.log(req.body.club_name, req.body.winner, req.body.loser);
   if (req.body.club_name == undefined || req.body.winner == undefined || req.body.loser == undefined) {
@@ -216,6 +256,10 @@ app.post('/update_scores', express.json(), (req, res) => {
   }
   console.log(decodeURI(req.body.club_name), decodeURI(req.body.winner), decodeURI(req.body.loser));
   resume_db.update_scores(decodeURI(req.body.club_name), decodeURI(req.body.winner), decodeURI(req.body.loser)).then((result) => {
+    if(result == null) {
+      res.status(400).json({ message: 'Failed to update scores' });
+      return;
+    }
     res.json({ message: 'Scores updated successfully!' });
   }).catch((err) => {
     console.log(err);
