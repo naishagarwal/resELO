@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import upload_styles from './upload.module.css';
 
 function FileUpload({club_name}) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [inputValue, setInputValue] = useState('');
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -27,10 +29,23 @@ function FileUpload({club_name}) {
   };
 
   return (
+    <form>
     <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleFileUpload}>Upload</button>
+      <div className={upload_styles.input_field}>
+        <label>Name: </label>
+        <input type="text" />
+      </div>
+      <div className={upload_styles.input_field}>
+        <label>Email: </label>
+        <input type="text" />
+      </div>
+      <div className={upload_styles.buttons}>
+      <input className={upload_styles.file_upload} type="file" onChange={handleFileChange} />
+      <button className={upload_styles.file_upload} onClick={handleFileUpload}>Upload</button>
+      </div>
     </div>
+    </form>
+
   );
 }
 
