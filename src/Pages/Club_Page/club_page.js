@@ -4,12 +4,14 @@ import club_styles from './club_page_style.module.css';
 import {useParams} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 import Log_Out from '../Sign_Up_Page/log_out.js';
+import { getAuth } from "firebase/auth";
+
 
 function Stats({num_resumes, num_games, avg_games}) {
 
   const my_num_resumes = num_resumes;
   const my_num_games = num_games;
-  const my_avg_games = avg_games;
+  const my_avg_games = num_games/num_resumes;
 
   return (
     <>
@@ -37,60 +39,65 @@ export default function Page() {
   let isNonListObject = false;
 
 useEffect(() => {
-  console.log("LOOOK"+clubName);
   if (clubName == null) {
     return;
   }
-  console.log("clubName: " + clubName);
-  fetch('http://localhost:4000/club_info/' + clubName, {
-    mode: 'cors',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
-    method: 'get',
-  }).then((response) => { return response.json()})
-  .then((data) => {
-    console.log(data);
-    if(data.exists) {
-      set_club_exists("Exists");
-      setClubData(data); // Update clubData with the received data
-    } else {
-      set_club_exists("Does not exist");
-      console.log("Club does not exist");
-    }
-      // Additional processing or state setting with the data here
-  }).catch((error) => {
-      setValid("server down");
-      console.log(error);
-  });
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (user) { 
+    auth.currentUser.getIdToken().then((idToken) => {
+      fetch('http://localhost:4000/club_info/' + clubName, {
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': idToken,
+        },
+        method: 'get',
+      }).then((response) => { return response.json()})
+      .then((data) => {
+        console.log(data);
+        if(data.exists) {
+          set_club_exists("Exists");
+          setClubData(data); // Update clubData with the received data
+        } else {
+          set_club_exists("Does not exist");
+          console.log("Club does not exist");
+        }
+          // Additional processing or state setting with the data here
+      }).catch((error) => {
+          setValid("server down");
+          console.log(error);
+      });
 
-  fetch('http://localhost:4000/get_resumes/'+ clubName, {
-    mode: 'cors',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    },
-    method: 'get',
-  }).then((response) => { return response.json()})
-  .then((data) => {
-    console.log(data.resumes);
-
-    // Check if data.resumes is an array or list
-    if (Array.isArray(data.resumes)) {
-        set_resume_list(data.resumes);
-        set_search_results(data.resumes);
-    } else {
-        // Set flag to true if it's a non-list object
-        isNonListObject = true;
-    }
-    
-  }).catch((error) => {
-      alert(error);
-      return [];
-  });
-
-
+      fetch('http://localhost:4000/get_resumes/'+ clubName, {
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': idToken,
+        },
+        method: 'get',
+      }).then((response) => { return response.json()})
+      .then((data) => {
+        console.log(data.resumes);
+        // Check if data.resumes is an array or list
+        if (Array.isArray(data.resumes)) {
+          set_resume_list(data.resumes);
+          set_search_results(data.resumes);
+        } else {
+          // Set flag to true if it's a non-list object
+          isNonListObject = true;
+        }
+  
+      }).catch((error) => {
+          alert(error);
+          return [];
+      });
+    });
+  } else {
+    navigate('/login');
+  }
 }, [clubName]);
 
 
@@ -145,13 +152,14 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
   { 
     emp_resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
       <div className={club_styles.resumeContainer} key={index}>
-        <div>{resume.author_name}</div>
-        <div> {resume.elo}</div>
+        <div>{Math.round(resume.elo)}</div>
+        <div> {resume.author_name}</div>
         <div>{resume.games_played}</div>
         <div>{resume.author_email}</div>
       </div>
       )
     );
+    emp_resumeItems.sort((a,b) => b.elo - a.elo)
   }
   const resumeItems = emp_resumeItems
   return (<div className={club_styles.scrollContainer}>
@@ -160,10 +168,10 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
              <SearchBar handleSearch={handleSearch} />
    </div>
    <div className={club_styles.scrollTitleCategories}>
-    <div>Rank:</div>
     <div>ELO:</div>
     <div>Name:</div>
-    <div>Resume:</div>
+    <div>Games Played:</div>
+    <div>Email:</div>
    </div>
    {resumeItems}
   </div>)

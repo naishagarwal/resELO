@@ -7,6 +7,7 @@ import Sign_Up from './Pages/Sign_Up_Page/sign_up_page';
 import Home from './Pages/Home_Page/home';
 import Log_In from './Pages/Sign_Up_Page/log_in_page';
 import Error from './Pages/Error_Page/error';
+import FormConfirmation from './Pages/Upload/form_confirmation';
 
 /* Firebase Config*/
 
@@ -47,6 +48,7 @@ const App = () => {
          <Route path="/sign-up" element={<Sign_Up />} />
          <Route path="/login" element={<Log_In />} />
          <Route path="/error" element={<Error />} />
+          <Route path="/confirmation" element={<FormConfirmation />} />
       </Routes>
       </BrowserRouter>
  );

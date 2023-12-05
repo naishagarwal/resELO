@@ -98,6 +98,10 @@ class Resume_Database {
             //     this.get_resume_elo(club_name, loser).then((loser_elo) => {
             this.db.all("SELECT elo FROM resume_info WHERE club_name = ? AND pdf_name = ?", [club_name, winner], (err, rows) => {
                 if (err) return console.error(err.message);
+                if (rows.length == 0) {
+                    resolve(null);
+                    return;
+                }
                 let winner_elo = rows[0].elo;
                 this.db.all("SELECT elo FROM resume_info WHERE club_name = ? AND pdf_name = ?", [club_name, loser], (err, rows) => {
                     if (err) return console.error(err.message);

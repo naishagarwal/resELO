@@ -39,7 +39,7 @@ function Log_In () {
     }
 
     function goToSignUp(){
-        navigate('/sign-up')
+        navigate('/sign-up');
     }
 
 

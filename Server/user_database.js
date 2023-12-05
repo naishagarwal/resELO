@@ -119,6 +119,22 @@ class User_Database {
         });
     }
 
+    check_user_acess_to_club(UID, club_name) {
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT * FROM user_clubs WHERE club_name = ? AND UID = ?`;
+            this.db.all(sql, [club_name, UID], (err, rows) => {
+                if (err) return console.error(err.message);
+                console.log('RRRRRRORORORWOWWWS');
+                console.log(rows);
+                if (rows.length == 0) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        });
+    }
+
 }
 
 module.exports = User_Database;

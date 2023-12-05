@@ -1,7 +1,7 @@
 import dash_styles from './dashboard.module.css';
 import { useState, useEffect } from 'react'; 
 import { ClubObject } from './ClubObject.js'; 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import Log_Out from '../Sign_Up_Page/log_out.js';
 
