@@ -29,11 +29,12 @@ function Stats({num_resumes, num_games, avg_games}) {
 export default function Page() {
   const {clubName} = useParams();
   const [resume_list, set_resume_list] = useState([]);
-  const [search_results, set_search_results] = useState(resume_list);
+  const [search_results, set_search_results] = useState([]);
   
   const [club_exists, set_club_exists] = useState("Loading...");
   const navigate = useNavigate(); // replace with function to return list of resume objects
   const [clubData, setClubData] = useState(null);
+  let isNonListObject = false;
 
 useEffect(() => {
   console.log("LOOOK"+clubName);
@@ -74,12 +75,21 @@ useEffect(() => {
   }).then((response) => { return response.json()})
   .then((data) => {
     console.log(data.resumes);
-    set_resume_list(data.resumes);
-    set_search_results(data.resumes);
+
+    // Check if data.resumes is an array or list
+    if (Array.isArray(data.resumes)) {
+        set_resume_list(data.resumes);
+        set_search_results(data.resumes);
+    } else {
+        // Set flag to true if it's a non-list object
+        isNonListObject = true;
+    }
+    
   }).catch((error) => {
       alert(error);
       return [];
   });
+
 
 }, [clubName]);
 
@@ -128,16 +138,21 @@ useEffect(() => {
 }
 
 function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link that can prese nt the pdf or just a name
-  const resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
-     <div className={club_styles.resumeContainer} key={index}>
-      <div>{resume.author_name}</div>
-      <div> {resume.elo}</div>
-      <div>{resume.games_played}</div>
-      <div>{resumes.author_email}</div>
-     </div>
-     )
-   );
- 
+  let emp_resumeItems = []
+  console.log("Number of Resumes" + resumes.length)
+  if (resumes.length != 0)
+  { 
+    emp_resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
+      <div className={club_styles.resumeContainer} key={index}>
+        <div>{resume.author_name}</div>
+        <div> {resume.elo}</div>
+        <div>{resume.games_played}</div>
+        <div>{resume.author_email}</div>
+      </div>
+      )
+    );
+  }
+  const resumeItems = emp_resumeItems
   return (<div className={club_styles.scrollContainer}>
    <div className={club_styles.scrollTitleWithSearchBar}>
              <div className={club_styles.scrollTitle}> Club Resumes </div>
