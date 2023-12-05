@@ -198,6 +198,20 @@ class Resume_Database {
         });
     }
 
+    club_exists(club_name) {
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT * FROM clubs WHERE club_name = ?`;
+            this.db.all(sql, [club_name], (err, rows) => {
+                if (err) return console.error(err.message);
+                if (rows.length == 0) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
+        });
+    }
+
 }
 
 module.exports = Resume_Database;

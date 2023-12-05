@@ -10,7 +10,7 @@ const Upload = () => {
     let url = window.location.href;
     let club_name = url.split('/')[url.split('/').length-1];
     useEffect(() => {
-        fetch('http://localhost:4000/club_info/'+club_name, {
+        fetch('http://localhost:4000/exists/'+club_name, {
             mode: 'cors',
             headers: {
                 'Accept': 'application/json',
