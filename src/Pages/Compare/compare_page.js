@@ -2,13 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import compare_styles from './compare_style.module.css';
 import {useNavigate, useParams} from 'react-router-dom'
-<<<<<<< HEAD
 // import { getAuth } from "firebase/auth";
-=======
 import { getAuth } from "firebase/auth";
 import Log_Out from '../Sign_Up_Page/log_out.js';
 
->>>>>>> 076da1fc79a769fc9d3460227301e53aa613a49b
 
 function Resume({ resume,  onButtonClick }) {
     return (
