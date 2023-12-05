@@ -42,8 +42,24 @@ function User_Dashboard() {
     }
   }, []);
 
+  const notAlphaNum = (e) => {
+    if(!/[0-9a-zA-Z]/.test(e.key)){
+      alert("Club name must only consist of numbers and letters!");
+      e.preventDefault();
+    }
+  }
 
   const addClub = () => {
+    if (inputValue == ""){
+      return;
+    }
+
+    if (inputValue.includes('.'))
+    {
+      alert("Club name must only consist of numbers and letters!");
+      setInputValue('');
+      return;
+    }
     auth.currentUser.getIdToken().then((idToken) => {
       fetch('http://localhost:4000/add_club', {
         mode : 'cors',
@@ -87,12 +103,14 @@ function User_Dashboard() {
       <div className={dash_styles.buttonDisplay}>
       <button className={dash_styles.LogOutButton}
                   onClick={logout}>Log Out</button>
-      <h1 className={dash_styles.title}>USER'S DASHBOARD</h1>
+      <h1 className={dash_styles.title}>DASHBOARD</h1>
           <div className={dash_styles.input}>
             <div>
               <input className={dash_styles.input_field}
                 type="text"
+                minLength={1}
                 value={inputValue}
+                onKeyDown={(e)=>{notAlphaNum(e)}}
                 onChange={ (e) => {setInputValue(e.target.value)} }
                 required
               />
@@ -104,7 +122,7 @@ function User_Dashboard() {
       <div className="output">
          {components.map((club_name, i) => (
             <div key={i}>
-              <ClubObject club_name={club_name} ></ClubObject>
+              <ClubObject club_name={club_name}></ClubObject>
             </div>
           ))}
       </div>
