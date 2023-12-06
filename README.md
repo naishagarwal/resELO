@@ -5,9 +5,10 @@ CS 35L Final Project
 We use Firebase in this project for user-authentication using Firebase's RealTime Database. By creating a project on Firebase and creating a Realtime Database, one should be able to obtain a private API key and other information needed to run the realtime databse in a file "service_account.json". This file should be added to the Server folder in this repo, so that the Firebase Realtime
 Database can run and successfuly user authenticate.
 
-One will also need to install the firebase package using the command:
+One will also need to install the firebase package using the command. Also run npm install to install all other packages needed:
 ```
 npm install firebase
+npm install
 ```
 to obtain all firebase packages and commands needed.
 
