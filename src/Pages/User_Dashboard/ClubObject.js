@@ -24,7 +24,7 @@ function ClubObject(props) {
         {props.club_name}
         </Link>
         </div>
-        <button className={dash_styles.LinkButton} onClick={() => copyClubLink(props.club_name)}>{isCopied ? 'Copied!' : 'Copy Club Link'}</button>
+        <button className={dash_styles.LinkButton} onClick={() => copyClubLink(props.club_name)}>{isCopied ? 'Copied!' : 'Copy Upload Page Link'}</button>
       </div>
     </div> 
   ); 

@@ -10,7 +10,7 @@
     "sqlite3": "^5.1.6"
   },
   "main": "/index.js",
-  "name": "vy6j3f",
+  "name": "resELO",
   "description": null,
   "version": "0.0.0",
   "scripts": {
