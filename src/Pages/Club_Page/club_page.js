@@ -17,7 +17,8 @@ function Stats({num_resumes, num_games, avg_games}) {
     <>
       <div className={club_styles.stats}> 
         <div className={club_styles.titleBar}> Stats </div>
-        <div className={club_styles.counterContent}> <br /> Confidence Score: n/a% <br />
+        <div className={club_styles.counterContent}> 
+        <br />
         Number of Resumes: {my_num_resumes}<br />
         Total Games: {my_num_games/2}<br />
         Average Games per Resume: {my_avg_games}<br />
