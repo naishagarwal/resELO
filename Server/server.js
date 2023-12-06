@@ -167,7 +167,7 @@ app.get('/get_clubs', express.json(), (req, res) => {
 });
 
 
-app.get('/get_next_resumes/*', checkUserClubAcess, (req, res) => {
+app.get('/get_next_resumes/*', (req, res) => {
   let club_name = req.originalUrl.split('/')[2];
 
   resume_db.get_next_resumes(club_name).then((file_name) => {
@@ -247,7 +247,7 @@ app.post('/signup', express.json(), (req, res) => {
 });
 
 
-app.post('/update_scores', express.json(), checkUserClubAcess, (req, res) => {
+app.post('/update_scores', express.json(), (req, res) => {
   
   console.log(req.body.club_name, req.body.winner, req.body.loser);
   if (req.body.club_name == undefined || req.body.winner == undefined || req.body.loser == undefined) {
@@ -266,6 +266,16 @@ app.post('/update_scores', express.json(), checkUserClubAcess, (req, res) => {
     res.status(400).json({ message: err });
   });
 })
+
+app.get('/exists/*', (req, res) => {
+  let club_name = req.originalUrl.split('/')[2];
+  resume_db.club_exists(club_name).then((result) => {
+    res.status(200).json({exists: result});
+  }).catch((err) => {
+    console.log(err);
+    res.status(400).json({ message: err });
+  });
+});
 
 
 app.post('/upload/*', upload_pdf.single('file'), (req, res) => {

@@ -11,15 +11,16 @@ function Stats({num_resumes, num_games, avg_games}) {
 
   const my_num_resumes = num_resumes;
   const my_num_games = num_games;
-  const my_avg_games = num_games/num_resumes;
+  const my_avg_games = Math.round((num_games/num_resumes)* 100)/100;
 
   return (
     <>
       <div className={club_styles.stats}> 
         <div className={club_styles.titleBar}> Stats </div>
-        <div className={club_styles.counterContent}> <br /> Confidence Score: n/a% <br />
+        <div className={club_styles.counterContent}> 
+        <br />
         Number of Resumes: {my_num_resumes}<br />
-        Total Games: {my_num_games}<br />
+        Total Games: {my_num_games/2}<br />
         Average Games per Resume: {my_avg_games}<br />
         <br />
         </div>
@@ -150,6 +151,7 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
   console.log("Number of Resumes" + resumes.length)
   if (resumes.length != 0)
   { 
+    resumes.sort((a,b) => b.elo - a.elo)
     emp_resumeItems = resumes.map((resume,index) => ( // currently implemented as a list of strings
       <div className={club_styles.resumeContainer} key={index}>
         <div>{Math.round(resume.elo)}</div>
@@ -159,7 +161,6 @@ function Resumes({resumes, handleSearch}){ // Do we want resumes to be a link th
       </div>
       )
     );
-    emp_resumeItems.sort((a,b) => b.elo - a.elo)
   }
   const resumeItems = emp_resumeItems
   return (<div className={club_styles.scrollContainer}>
