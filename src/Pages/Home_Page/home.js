@@ -27,7 +27,7 @@ const Home = () => {
                 </Link>
             </div>
             <h2 className={home_styles.info_text}>
-                For questions, comments, or concerns, reach out to reselo@gmail.com!
+                For questions, comments, or concerns, reach out to resELOteam@gmail.com!
             </h2>
         </div>
 
