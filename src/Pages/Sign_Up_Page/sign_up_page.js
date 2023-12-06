@@ -31,7 +31,7 @@ function sign_up () {
         .then(response => {
             if(!response.ok) { //if failed to create account
                 //alert("Failed to create account!");
-                throw new Error('Failed to create account')
+                throw new Error('Failed to create account. Please ensure you have a valid email and a password with atleast 6 characters')
             }
             return response.json();
         })
